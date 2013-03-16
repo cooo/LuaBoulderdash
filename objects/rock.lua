@@ -13,9 +13,10 @@ function rock:update(dt)
 	self:fall()
 end
 
+-- only 1 out of 8 tries leads to a push
 function rock:push(x)
 	local xr,yr = self:getPos()
-	if (boulderdash:find(xr+x,yr).type=="space") then
+	if ((math.random(1,8)==1) and (boulderdash:find(xr+x,yr).type=="space")) then
 		self:doMove( x, 0 )
 	end
 end

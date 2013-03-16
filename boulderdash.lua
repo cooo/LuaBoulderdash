@@ -1,3 +1,6 @@
+require("camera")
+require("levels/levels")
+
 boulderdash = {}
 boulderdash.objects = {}
 boulderdash.objpath = "objects/"
@@ -25,6 +28,37 @@ function boulderdash:Startup()
 			register[obj_name] = love.filesystem.load( boulderdash.objpath .. file )
 		end
 	end
+	
+	-- loadup the first level
+	self:LevelUp(at_level)
+	
+end
+
+function boulderdash:LevelUp(level_index)
+	
+	level = levels[level_index].playfield
+	for y,i in pairs(level) do
+		for x,j in pairs(level[y]) do
+			if level[y][x]=="S" then
+				boulderdash.Create( "steel", x, y )
+		    elseif level[y][x]=="W" then
+				boulderdash.Create( "wall", x, y )
+		    elseif level[y][x]=="r" then
+				boulderdash.Create( "rock", x, y )
+		    elseif level[y][x]=="d" then
+				boulderdash.Create( "diamond", x, y )
+			elseif level[y][x]=="." then
+				boulderdash.Create( "dirt", x, y )
+			elseif level[y][x]=="X" then
+				boulderdash.Create( "rockford", x, y )
+			elseif level[y][x]=="P" then
+				boulderdash.Create( "outbox", x, y )
+			elseif level[y][x]==" " then
+				boulderdash.Create( "space", x, y )
+			end
+		end
+	end
+    
 end
 
 function boulderdash.Derive(name)
@@ -62,6 +96,15 @@ function boulderdash:update(dt)
 	delay_dt = delay_dt + dt
 end
 
+function boulderdash:default()
+	idle_time = love.timer.getMicroTime()	-- the start of idle time
+	for i, object in pairs(boulderdash.objects) do
+		if object.default then
+			object:default()
+		end
+	end
+end
+
 function boulderdash:draw()
 	
 	camera:set()
@@ -75,6 +118,9 @@ function boulderdash:draw()
 	camera:unset()
 	
 	-- draw a scoreboard on top
+	love.graphics.setColor(0,0,0)
+	love.graphics.rectangle("fill", 0, 0, 800, 32 )
+	
 	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 	
 	if (boulderdash.diamonds >= levels[at_level].diamonds_to_get) then

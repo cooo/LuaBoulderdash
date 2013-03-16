@@ -9,7 +9,6 @@ local random_number_lock = false
 local sprite_index
 
 function rockford:load( x, y )
-	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "rockford/rockford.png"))
 	
 	files = love.filesystem.enumerate( boulderdash.imgpath .. "rockford" )
 	for k, file in ipairs(files) do
@@ -37,17 +36,24 @@ end
 
 function rockford:update(dt)
 	self:move(dt)
-	self:die()
-	if no_keys then
-		self:setImage(love.graphics.newImage( boulderdash.imgpath .. "rockford/rockford.png"))
-	end
-	
+	self:he_might_die()
 	self:wink()
-	
 end
 
--- when a rock falls on his head rockford dies
-function rockford:die()
+function rockford:default()
+	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "rockford/rockford.png"))
+end
+
+-- move him around
+function rockford:move(dt)
+	if love.keyboard.isDown("right") then self:moveright(1) end
+	if love.keyboard.isDown("down")  then self:movedown(1)  end
+	if love.keyboard.isDown("left")  then self:moveleft(-1) end
+	if love.keyboard.isDown("up")    then self:moveup(-1)   end
+end
+
+-- when a rock or diamond falls on his head rockford dies
+function rockford:he_might_die()
 	local xr,yr = self:getPos()
 	
 	local object = boulderdash:find(xr,yr-1)
@@ -58,12 +64,27 @@ function rockford:die()
 
 end
 
-function rockford:move(dt)
-	
-	if love.keyboard.isDown("right") then self:moveright(1) end
-	if love.keyboard.isDown("down")  then self:movedown(1)  end
-	if love.keyboard.isDown("left")  then self:moveleft(-1) end
-	if love.keyboard.isDown("up")    then self:moveup(-1)   end
+-- he gets a little nervous when he doesn't have anything to do
+function rockford:wink()
+	local timer = since(idle_time)
+	if (timer > 2) then
+
+		if not random_number_lock then
+			random_number_lock = true
+			random_number = math.random(1,2)
+		end
+		
+		if (random_number==1) then
+			rockford:setImgWink(timer)
+		else
+			rockford:setImgTap(timer)
+		end
+
+		if sprite_index==8 then
+			random_number_lock = false
+			idle_time = reset_time() 
+		end 
+	end
 end
 
 
@@ -101,7 +122,7 @@ function rockford:canMove(x,y)
 
 	if (object.hard and not object.consume) then
 		print(object.type)
-		if (object.type=="rock") then
+		if (object.push) then
 			object:push(x)
 		end
 		return false
@@ -163,26 +184,5 @@ function rockford:setImgTap(timer)
 end
 
 
-function rockford:wink()
-	local timer = since(idle_time)
-	if (timer > 2) then
-
-		if not random_number_lock then
-			random_number_lock = true
-			random_number = math.random(1,2)
-		end
-		
-		if (random_number==1) then
-			rockford:setImgWink(timer)
-		else
-			rockford:setImgTap(timer)
-		end
-
-		if sprite_index==8 then
-			random_number_lock = false
-			idle_time = reset_time() 
-		end 
-	end
-end
 
 return rockford
