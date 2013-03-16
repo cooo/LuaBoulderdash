@@ -106,7 +106,7 @@ function rockford:canMove(x,y)
 		end
 		return false
 	end
-
+	idle_time = love.timer.getMicroTime()	-- the start of idle time
 	rockford:consume(object)
 	return true
 end
@@ -121,13 +121,12 @@ function rockford:doMoveRockford(x,y)
 	-- 11 -> 10 no move
 	-- 11 -> 12 move camera
 	-- 12 -> 11 move camera
-	print("move (" .. x .. ", " .. y .. "): (" .. xr .. ", " .. yr )
 	if ((xr+x>11 and xr>11) and (xr<30 and xr+x<30)) then
 		camera:move(x*scale,0)
 		local xc, yc = camera:getPosition()
 		print("camera at: (" .. xc/scale .. ", " .. yc/scale .. ")")
 	end
-	if (yr>7 and yr<13) then
+	if ((yr>7 and yr+y>7) and (yr<13 and yr+y<13)) then
 		camera:move(0,y*scale)
 	end
 	

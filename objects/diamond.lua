@@ -2,12 +2,10 @@ local diamond = boulderdash.Derive("base")
 diamond.hard = true
 diamond.rounded = true
 diamond.images = {}
-diamond.first = nil
 diamond.sprite_index = nil
 
 function diamond:load( x, y )
 	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "diamonds_32.png"))
-		
 	for i=0, 32*(8-1), 32 do
 		table.insert( self.images, love.graphics.newQuad(i, 0, 32, 32, 32*8, 32) )
 	end
@@ -27,7 +25,7 @@ function diamond:draw()
 end
 
 function diamond:consume()
-	print("yum!")
+	boulderdash.diamonds = boulderdash.diamonds + 1
 end
 
 return diamond

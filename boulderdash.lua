@@ -3,6 +3,7 @@ boulderdash.objects = {}
 boulderdash.objpath = "objects/"
 boulderdash.imgpath = "images/"
 boulderdash.scale = 1
+boulderdash.diamonds = 0
 local register = {}
 local id = 0
 
@@ -46,21 +47,40 @@ function boulderdash.Create(name, x, y)
 end
 
 function boulderdash:update(dt)
-	for i, object in pairs(boulderdash.objects) do
-		if object.update then
-			if not object.moved then
-				object:update(dt)
-			else
-				object.moved = false
-			end	
+	if delay_dt > delay then
+		for i, object in pairs(boulderdash.objects) do
+			if object.update then
+				if not object.moved then
+					object:update(dt)
+				else
+					object.moved = false
+				end	
+			end
 		end
-	end
+		delay_dt = 0
+    end
+	delay_dt = delay_dt + dt
 end
 
 function boulderdash:draw()
+	
+	camera:set()
+
 	for i, object in pairs(boulderdash.objects) do
 		if object.draw then
 			object:draw()
 		end
 	end
+	
+	camera:unset()
+	
+	-- draw a scoreboard on top
+	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+	
+	if (boulderdash.diamonds >= levels[at_level].diamonds_to_get) then
+		love.graphics.print("Score ".. tostring(boulderdash.diamonds .. " Done."), 400, 10)
+	else
+		love.graphics.print("Score ".. tostring(boulderdash.diamonds), 400, 10)
+	end
+	
 end

@@ -13,9 +13,10 @@ function love.load()
 	delay_dt = 0
 	
 	boulderdash:Startup()
+	at_level = 1
 	
 	scale = 32
-	
+	level = levels[at_level].playfield
 	for y,i in pairs(level) do
 		for x,j in pairs(level[y]) do
 			if level[y][x]=="S" then
@@ -44,27 +45,13 @@ end
 function love.update(dt)
 	if gamePaused then return end
 		
-		
-	if delay_dt > delay then
-	    
-		boulderdash:update(dt)	
-		delay_dt = 0
-    end
-	delay_dt = delay_dt + dt
+	boulderdash:update(dt)	
 end
 
 function love.draw()
-	camera:set()
 	boulderdash:draw()
-	camera:unset()
-	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
 
-function love.mousepressed(x, y, button)
-end
-
-function love.mousereleased(x, y, button)
-end
 
 function love.keypressed(key, unicode)
 	no_keys = false
