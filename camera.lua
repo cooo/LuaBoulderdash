@@ -36,6 +36,10 @@ function camera:setPosition(x, y)
   self.y = y or self.y
 end
 
+function camera:getPosition()
+	return self.x, self.y
+end
+
 function camera:setScale(sx, sy)
   self.scaleX = sx or self.scaleX
   self.scaleY = sy or self.scaleY

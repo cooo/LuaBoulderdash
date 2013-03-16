@@ -112,12 +112,20 @@ function rockford:canMove(x,y)
 end
 
 function rockford:doMoveRockford(x,y)
-	self:doMove(x,y)
-	
+
 	local xr,yr = self:getPos()
-	print(xr .. " " .. xr+x)
-	if (xr>11 and xr<29) then
+	self:doMove(x,y)
+
+	-- xr -> xxr
+	-- 10 -> 11 no move
+	-- 11 -> 10 no move
+	-- 11 -> 12 move camera
+	-- 12 -> 11 move camera
+	print("move (" .. x .. ", " .. y .. "): (" .. xr .. ", " .. yr )
+	if ((xr+x>11 and xr>11) and (xr<30 and xr+x<30)) then
 		camera:move(x*scale,0)
+		local xc, yc = camera:getPosition()
+		print("camera at: (" .. xc/scale .. ", " .. yc/scale .. ")")
 	end
 	if (yr>7 and yr<13) then
 		camera:move(0,y*scale)
