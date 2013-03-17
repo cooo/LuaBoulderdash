@@ -6,12 +6,19 @@ boulderdash.objects = {}
 boulderdash.objpath = "objects/"
 boulderdash.imgpath = "images/"
 boulderdash.diamonds = 0
+boulderdash.at_level = 0
+boulderdash.goal = {}
+boulderdash.done = false
 
 local register = {}
 local id = 0
 
 function id(x,y)
 	return "x" .. x .. "y" .. y
+end
+
+function boulderdash:setDone()
+	boulderdash.done = true
 end
 
 function boulderdash:find(x,y)
@@ -30,34 +37,22 @@ function boulderdash:Startup()
 	end
 	
 	-- loadup the first level
-	self:LevelUp(at_level)
-	
+	self:LevelUp()
 end
 
-function boulderdash:LevelUp(level_index)
-	
-	level = levels[level_index].playfield
+function boulderdash:LevelUp()
+
+	self.objects = {}
+	self.at_level = self.at_level + 1
+	level = levels[self.at_level].playfield
 	for y,i in pairs(level) do
 		for x,j in pairs(level[y]) do
-			if level[y][x]=="S" then
-				boulderdash.Create( "steel", x, y )
-		    elseif level[y][x]=="W" then
-				boulderdash.Create( "wall", x, y )
-		    elseif level[y][x]=="r" then
-				boulderdash.Create( "rock", x, y )
-		    elseif level[y][x]=="d" then
-				boulderdash.Create( "diamond", x, y )
-			elseif level[y][x]=="." then
-				boulderdash.Create( "dirt", x, y )
-			elseif level[y][x]=="X" then
-				boulderdash.Create( "rockford", x, y )
-			elseif level[y][x]=="P" then
-				boulderdash.Create( "outbox", x, y )
-			elseif level[y][x]==" " then
-				boulderdash.Create( "space", x, y )
-			end
+			boulderdash.Create( object_map[level[y][x]], x, y )
 		end
 	end
+	print(self.at_level)
+	self.done = false
+	camera:setPosition( 0, 0 )
     
 end
 
@@ -80,20 +75,34 @@ function boulderdash.Create(name, x, y)
 	end
 end
 
+function boulderdash:setGoal( x, y )
+	self.goal = { x=x,y=y }
+end
+
+function boulderdash:getGoal()
+	return self.goal
+end
+
+
 function boulderdash:update(dt)
-	if delay_dt > delay then
-		for i, object in pairs(boulderdash.objects) do
-			if object.update then
-				if not object.moved then
-					object:update(dt)
-				else
-					object.moved = false
-				end	
+	if not boulderdash.done then
+	
+		if delay_dt > delay then
+			for i, object in pairs(boulderdash.objects) do
+				if object.update then
+					if not object.moved then
+						object:update(dt)
+					else
+						object.moved = false
+					end	
+				end
 			end
-		end
-		delay_dt = 0
-    end
-	delay_dt = delay_dt + dt
+			delay_dt = 0
+	    end
+		delay_dt = delay_dt + dt
+	else
+		boulderdash:LevelUp()
+	end
 end
 
 function boulderdash:default()
@@ -123,10 +132,11 @@ function boulderdash:draw()
 	
 	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 	
-	if (boulderdash.diamonds >= levels[at_level].diamonds_to_get) then
+	if (boulderdash.diamonds >= levels[boulderdash.at_level].diamonds_to_get) then
 		love.graphics.print("Score ".. tostring(boulderdash.diamonds .. " Done."), 400, 10)
 	else
 		love.graphics.print("Score ".. tostring(boulderdash.diamonds), 400, 10)
 	end
 	
 end
+

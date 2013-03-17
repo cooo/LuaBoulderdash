@@ -1,8 +1,6 @@
 local rock = boulderdash.Derive("base")
 rock.rounded = true
 rock.hard = true
-rock.falling = false
-
 
 function rock:load( x, y )
 	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "rock.png"))

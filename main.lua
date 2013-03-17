@@ -4,7 +4,6 @@ function love.load()
 
 	t_minus_zero = reset_time()
 	idle_time = reset_time()
-	at_level = 1
 	gamePaused = false
 	delay = 0.05
 	delay_dt = 0

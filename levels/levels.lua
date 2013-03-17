@@ -1,7 +1,19 @@
+object_map = {
+	S     = "steel",
+	W     = "wall",
+	r     = "rock",
+	d     = "diamond",
+	["."] = "dirt",
+	X     = "rockford",
+	P     = "outbox",
+	[" "] = "space"
+}
+
+
 levels = {}
 
-local level = {}
-level.playfield = {
+local level1 = {}
+level1.playfield = {
 		{ "S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S" },
 		{ "S",".",".",".",".",".","."," ",".",".","d",".","r"," ",".",".",".",".",".","r",".","r",".",".",".",".",".",".","."," ",".",".",".",".","r",".",".",".",".","S" },
 		{ "S",".","r","X","r",".",".",".",".",".","."," ",".",".",".",".",".",".",".",".",".","r","d",".",".","r",".",".",".","."," ",".",".",".",".","."," ",".",".","S" },
@@ -26,7 +38,21 @@ level.playfield = {
 		{ "S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S" }
 		}
 
-level.diamonds_to_get = 12
+level1.diamonds_to_get = 12
 
-table.insert(levels, level)
+
+local level2 = {}
+level2.playfield = {
+		{ "S","S","S","S","S","S","S","S","S","S","S" },
+		{ "S","X",".",".",".",".",".",".",".",".","S" },
+		{ "S",".",".","."," ",".",".",".",".","r","S" },
+		{ "S",".","d",".",".",".",".",".","r","P","S" },
+		{ "S","S","S","S","S","S","S","S","S","S","S" }
+		}
+
+level2.diamonds_to_get = 1
+
+table.insert(levels, level1)
+
+table.insert(levels, level2)
 

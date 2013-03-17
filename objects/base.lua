@@ -49,7 +49,7 @@ end
 
 function base:fall()
 	local x,y = base:getPos()
-	
+
 	-- fall straight down
 	if (boulderdash:find(x,y+1).type == "space") then
 		base.falling = true

@@ -38,6 +38,7 @@ function rockford:update(dt)
 	self:move(dt)
 	self:he_might_die()
 	self:wink()
+	self:are_we_done()
 end
 
 function rockford:default()
@@ -85,6 +86,21 @@ function rockford:wink()
 			idle_time = reset_time() 
 		end 
 	end
+end
+
+function rockford:are_we_done()
+	local xr,yr = self:getPos()
+	local goal = boulderdash:getGoal()
+	
+	-- we could just compare x's en y's, but the distance is more fun
+	local distance_to_goal = math.sqrt( math.abs(xr-goal.x)^2 + math.abs(yr-goal.y)^2 )
+	
+	if (distance_to_goal == 0) then
+		print("we're done")
+		-- add timeleft to score
+		boulderdash.setDone()
+	end
+	
 end
 
 
