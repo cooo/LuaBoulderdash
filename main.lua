@@ -8,10 +8,9 @@ function love.load()
 	gamePaused = false
 	delay = 0.05
 	delay_dt = 0
-	scale = 32
 
 	love.graphics.setColorMode("replace")
-	
+	screen_width = love.graphics.getWidth()	
 	boulderdash:Startup()
 
 end

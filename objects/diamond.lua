@@ -21,7 +21,7 @@ end
 function diamond:draw()
 	local x, y = self:getPos()	
 	local img  = self:getImage()
-	love.graphics.drawq(img, self.images[self.sprite_index or 1], x*scale, y*scale)
+	love.graphics.drawq(img, self.images[self.sprite_index or 1], x*self.scale, y*self.scale)
 end
 
 function diamond:consume()

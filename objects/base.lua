@@ -8,6 +8,7 @@ base.rounded = false
 base.hard = false
 base.moved = false
 base.debug = false
+base.scale = 32
 
 function id(x,y)
 	return "x" .. x .. "y" .. y
@@ -95,7 +96,7 @@ end
 function base:draw()	
 	local x, y = self:getPos()	
 	local img = self:getImage()
-	love.graphics.draw(img, x*scale, y*scale, 0, 2, 2)
+	love.graphics.draw(img, x*self.scale, y*self.scale, 0, 2, 2)
 	
 	if (base.debug) then
 		print(base.type)

@@ -5,8 +5,8 @@ boulderdash = {}
 boulderdash.objects = {}
 boulderdash.objpath = "objects/"
 boulderdash.imgpath = "images/"
-boulderdash.scale = 1
 boulderdash.diamonds = 0
+
 local register = {}
 local id = 0
 
@@ -119,7 +119,7 @@ function boulderdash:draw()
 	
 	-- draw a scoreboard on top
 	love.graphics.setColor(0,0,0)
-	love.graphics.rectangle("fill", 0, 0, 800, 32 )
+	love.graphics.rectangle("fill", 0, 0, screen_width, 32 )
 	
 	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 	
