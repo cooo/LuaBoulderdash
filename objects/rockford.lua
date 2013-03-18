@@ -60,7 +60,7 @@ function rockford:he_might_die()
 	local object = boulderdash:find(xr,yr-1)
 	if (object.falling) then
 		print("game over")
-		gamePaused = true
+		boulderdash.dead = true
 	end
 
 end

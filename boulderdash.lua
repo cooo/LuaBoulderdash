@@ -9,7 +9,7 @@ boulderdash.diamonds = 0
 boulderdash.at_level = 0
 boulderdash.goal = {}
 boulderdash.done = false
-
+boulderdash.dead = false
 local register = {}
 local id = 0
 
@@ -40,7 +40,7 @@ function boulderdash:Startup()
 	self:LevelUp()
 end
 
-function boulderdash:LevelUp()
+function boulderdash:LevelUp()	
 
 	self.objects = {}
 	self.at_level = self.at_level + 1
@@ -50,11 +50,25 @@ function boulderdash:LevelUp()
 			boulderdash.Create( object_map[level[y][x]], x, y )
 		end
 	end
-	print(self.at_level)
+
+	boulderdash:Replace("rockford", "entrance")
+
 	self.done = false
 	camera:setPosition( 0, 0 )
     
 end
+
+function boulderdash:Replace(find, replace)
+	-- find rockford, and replace him with an entrance
+	for i, object in pairs(boulderdash.objects) do
+		if object.type == find then
+			boulderdash.Create( replace, object.x, object.y )
+			return object.x, object.y
+		end
+	end
+	
+end
+
 
 function boulderdash.Derive(name)
 	return love.filesystem.load( boulderdash.objpath .. name .. ".lua" )()
@@ -85,6 +99,20 @@ end
 
 
 function boulderdash:update(dt)
+	if boulderdash.dead then
+		local x,y = boulderdash:Replace("rockford", "explode")
+
+		boulderdash.Create( "explode", x+1, y )
+		boulderdash.Create( "explode", x-1, y )
+		boulderdash.Create( "explode", x+1, y-1 )
+		boulderdash.Create( "explode", x, y-1 )
+		boulderdash.Create( "explode", x-1, y-1 )
+		boulderdash.Create( "explode", x+1, y+1 )
+		boulderdash.Create( "explode", x, y+1 )
+		boulderdash.Create( "explode", x-1, y+1 )
+	
+		boulderdash.dead = false
+	end
 	if not boulderdash.done then
 	
 		if delay_dt > delay then

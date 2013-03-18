@@ -14,6 +14,10 @@ function id(x,y)
 	return "x" .. x .. "y" .. y
 end
 
+function base:to_s()
+	print(base.type .. ": (" .. base.x .. ", " .. base.y .. ")")
+end
+
 function base:setPos( x, y )
 --	print("base:setPos (" .. x .. ", " .. y .. ")" )
 	base.x = x
