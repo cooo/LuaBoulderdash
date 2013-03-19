@@ -10,6 +10,8 @@ boulderdash.at_level = 0
 boulderdash.goal = {}
 boulderdash.done = false
 boulderdash.dead = false
+boulderdash.start_over = false
+
 local register = {}
 local id = 0
 
@@ -54,6 +56,9 @@ function boulderdash:LevelUp()
 	boulderdash:Replace("rockford", "entrance")
 
 	self.done = false
+	boulderdash.dead = false
+	boulderdash.start_over = false
+	boulderdash.diamonds = 0
 	camera:setPosition( 0, 0 )
     
 end
@@ -61,7 +66,7 @@ end
 function boulderdash:Replace(find, replace)
 	-- find rockford, and replace him with an entrance
 	for i, object in pairs(boulderdash.objects) do
-		if object.type == find then
+		if ((object.type == find) or (object.id == find)) then
 			boulderdash.Create( replace, object.x, object.y )
 			return object.x, object.y
 		end
@@ -115,19 +120,24 @@ function boulderdash:update(dt)
 	end
 	if not boulderdash.done then
 	
-		if delay_dt > delay then
-			for i, object in pairs(boulderdash.objects) do
-				if object.update then
-					if not object.moved then
-						object:update(dt)
-					else
-						object.moved = false
-					end	
+		if not boulderdash.start_over then
+			if delay_dt > delay then
+				for i, object in pairs(boulderdash.objects) do
+					if object.update then
+						if not object.moved then
+							object:update(dt)
+						else
+							object.moved = false
+						end	
+					end
 				end
-			end
-			delay_dt = 0
-	    end
-		delay_dt = delay_dt + dt
+				delay_dt = 0
+		    end
+			delay_dt = delay_dt + dt
+		else
+			boulderdash.at_level = boulderdash.at_level - 1
+			boulderdash:LevelUp()
+		end
 	else
 		boulderdash:LevelUp()
 	end

@@ -19,7 +19,8 @@ function explode:update(dt)
 		self.sprite_index = self.sprite_index + 1
 		if (self.sprite_index >= self.end_frame) then
 			self.sprite_index = self.end_frame
-			-- start over
+			boulderdash:Replace(self.id, "space")
+			boulderdash.start_over = true
 		end
 		self.flash_timer = reset_time()
 	end	
