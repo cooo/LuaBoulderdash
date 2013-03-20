@@ -8,15 +8,18 @@ boulderdash.imgpath = "images/"
 boulderdash.diamonds = 0
 boulderdash.at_level = 0
 boulderdash.goal = {}
-boulderdash.done = false
+boulderdash.done = true
 boulderdash.dead = false
 boulderdash.start_over = false
 
 local register = {}
-local id = 0
 
 function id(x,y)
 	return "x" .. x .. "y" .. y
+end
+
+function boulderdash.Derive(name)
+	return love.filesystem.load( boulderdash.objpath .. name .. ".lua" )()
 end
 
 function boulderdash:setDone()
@@ -37,9 +40,6 @@ function boulderdash:Startup()
 			register[obj_name] = love.filesystem.load( boulderdash.objpath .. file )
 		end
 	end
-	
-	-- loadup the first level
-	self:LevelUp()
 end
 
 function boulderdash:LevelUp()	
@@ -75,10 +75,6 @@ function boulderdash:Replace(find, replace)
 end
 
 
-function boulderdash.Derive(name)
-	return love.filesystem.load( boulderdash.objpath .. name .. ".lua" )()
-end
-
 function boulderdash.Create(name, x, y)
 	x = x or 0
 	y = y or 0
@@ -102,45 +98,49 @@ function boulderdash:getGoal()
 	return self.goal
 end
 
+function boulderdash:explode()
+	local x,y = boulderdash:Replace("rockford", "explode")
+
+	boulderdash:canExplode( x+1, y )
+	boulderdash:canExplode( x-1, y )
+	boulderdash:canExplode( x+1, y-1 )
+	boulderdash:canExplode( x, y-1 )
+	boulderdash:canExplode( x-1, y-1 )
+	boulderdash:canExplode( x+1, y+1 )
+	boulderdash:canExplode( x, y+1 )
+	boulderdash:canExplode( x-1, y+1 )
+
+	boulderdash.dead = false -- to prevent starting the explode sequence again
+
+end
+
+function boulderdash:canExplode(x,y)
+	if not (boulderdash:find(x,y).type == "steel") then
+		boulderdash.Create( "explode", x, y )
+	end
+end
+
+
+function boulderdash:startOver()
+	boulderdash.at_level = boulderdash.at_level - 1
+	boulderdash:LevelUp()
+end
+
 
 function boulderdash:update(dt)
-	if boulderdash.dead then
-		local x,y = boulderdash:Replace("rockford", "explode")
-
-		boulderdash.Create( "explode", x+1, y )
-		boulderdash.Create( "explode", x-1, y )
-		boulderdash.Create( "explode", x+1, y-1 )
-		boulderdash.Create( "explode", x, y-1 )
-		boulderdash.Create( "explode", x-1, y-1 )
-		boulderdash.Create( "explode", x+1, y+1 )
-		boulderdash.Create( "explode", x, y+1 )
-		boulderdash.Create( "explode", x-1, y+1 )
-	
-		boulderdash.dead = false
-	end
-	if not boulderdash.done then
-	
-		if not boulderdash.start_over then
-			if delay_dt > delay then
-				for i, object in pairs(boulderdash.objects) do
-					if object.update then
-						if not object.moved then
-							object:update(dt)
-						else
-							object.moved = false
-						end	
-					end
-				end
-				delay_dt = 0
-		    end
-			delay_dt = delay_dt + dt
-		else
-			boulderdash.at_level = boulderdash.at_level - 1
-			boulderdash:LevelUp()
+	if delay_dt > delay then
+		for i, object in pairs(boulderdash.objects) do
+			if object.update then
+				if not object.moved then
+					object:update(dt)
+				else
+					object.moved = false
+				end	
+			end
 		end
-	else
-		boulderdash:LevelUp()
-	end
+		delay_dt = 0
+    end
+	delay_dt = delay_dt + dt
 end
 
 function boulderdash:default()

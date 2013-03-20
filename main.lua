@@ -17,7 +17,19 @@ end
 
 function love.update(dt)
 	if gamePaused then return end
-	boulderdash:update(dt)	
+	
+	if boulderdash.dead then
+		boulderdash:explode()
+	end
+	if not boulderdash.done then
+		if not boulderdash.start_over then
+			boulderdash:update(dt)
+		else
+			boulderdash:startOver()
+		end
+	else
+		boulderdash:LevelUp()
+	end
 end
 
 function love.draw()

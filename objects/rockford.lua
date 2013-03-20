@@ -45,12 +45,12 @@ function rockford:default()
 	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "rockford/rockford.png"))
 end
 
--- move him around
+-- move him around or grab something
 function rockford:move(dt)
-	if love.keyboard.isDown("right") then self:moveright(1) end
-	if love.keyboard.isDown("down")  then self:movedown(1)  end
-	if love.keyboard.isDown("left")  then self:moveleft(-1) end
-	if love.keyboard.isDown("up")    then self:moveup(-1)   end
+	if love.keyboard.isDown("right") then self:LeftOrRight( 1, love.keyboard.isDown(" ")) end
+	if love.keyboard.isDown("down")  then self:UpOrDown   ( 1, love.keyboard.isDown(" ")) end
+	if love.keyboard.isDown("left")  then self:LeftOrRight(-1, love.keyboard.isDown(" ")) end
+	if love.keyboard.isDown("up")    then self:UpOrDown   (-1, love.keyboard.isDown(" ")) end
 end
 
 -- when a rock or diamond falls on his head rockford dies
@@ -104,29 +104,28 @@ function rockford:are_we_done()
 end
 
 
-function rockford:moveleft(x)
+function rockford:LeftOrRight(x, grab)
 	if self:canMove( x, 0 ) then
-		self:doMoveRockford( x, 0 )
+		if grab then
+			self:doGrabRockford( x, 0 )
+		else
+			self:doMoveRockford( x, 0 )
+		end
 	end
-    self:setImgLeft()
+	if (x<0) then
+    	self:setImgLeft()
+	else
+		self:setImgRight()
+	end
 end
 
-function rockford:moveright(x)
-	if self:canMove( x, 0 ) then
-		self:doMoveRockford( x, 0 )
-	end
-	self:setImgRight()
-end
-
-function rockford:moveup(y)
+function rockford:UpOrDown(y, grab)
 	if self:canMove( 0, y ) then
-		self:doMoveRockford( 0, y )
-	end
-end
-
-function rockford:movedown(y)
-	if self:canMove( 0, y ) then
-		self:doMoveRockford( 0, y )
+		if grab then
+			self:doGrabRockford( 0, y )
+		else
+			self:doMoveRockford( 0, y )
+		end
 	end
 end
 
@@ -168,7 +167,11 @@ function rockford:doMoveRockford(x,y)
 	
 end
 
-
+function rockford:doGrabRockford(x,y)
+	local xr,yr = self:getPos()
+	local space = boulderdash.Create( "space", xr+x, yr+y )
+	boulderdash.objects[space.id] = space
+end
 
 function rockford:consume(object)
 	if object.consume then
