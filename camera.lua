@@ -4,6 +4,7 @@ camera.y = 0
 camera.scaleX = 1
 camera.scaleY = 1
 camera.rotation = 0
+camera.movements = {}
 
 function camera:set()
   love.graphics.push()
@@ -14,6 +15,14 @@ end
 
 function camera:unset()
   love.graphics.pop()
+end
+
+function camera:pushMove(x,y)
+	table.insert(self.movements, 1, {x=x,y=y})
+end
+
+function camera:popMove()
+	return table.remove(self.movements)
 end
 
 function camera:move(dx, dy)

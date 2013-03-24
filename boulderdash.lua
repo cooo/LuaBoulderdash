@@ -11,6 +11,7 @@ boulderdash.goal = {}
 boulderdash.done = true
 boulderdash.dead = false
 boulderdash.start_over = false
+boulderdash.flash = false
 
 local register = {}
 
@@ -49,18 +50,37 @@ function boulderdash:LevelUp()
 	level = levels[self.at_level].playfield
 	for y,i in pairs(level) do
 		for x,j in pairs(level[y]) do
-			boulderdash.Create( object_map[level[y][x]], x, y )
+			boulderdash.Create( object_map[level[y][x]], x-1, y )
 		end
 	end
 
-	boulderdash:Replace("rockford", "entrance")
+	local xc,yc = boulderdash:Replace("rockford", "entrance")
 
 	self.done = false
 	boulderdash.dead = false
 	boulderdash.start_over = false
 	boulderdash.diamonds = 0
-	camera:setPosition( 0, 0 )
-    
+
+
+	if (xc<11)then
+		xc = 0
+	elseif (xc>26) then
+		xc = 15
+	elseif ((yc>=11) and (yc<=26)) then
+		xc = xc - 11
+	end
+	
+	
+	if (yc<7)then
+		yc = 0
+	elseif (yc>=13) then
+		yc = 4
+	elseif ((yc>=7 and (yc<13))) then
+		yc = yc - 7
+	end
+	
+	print(xc .. " " .. yc)
+    camera:move(xc*32,yc*32)
 end
 
 function boulderdash:Replace(find, replace)
@@ -139,8 +159,14 @@ function boulderdash:update(dt)
 			end
 		end
 		delay_dt = 0
+		
+		if boulderdash.flash then
+			love.graphics.setBackgroundColor(0,0,0)
+		end
+	
     end
 	delay_dt = delay_dt + dt
+
 end
 
 function boulderdash:default()
@@ -153,7 +179,7 @@ function boulderdash:default()
 end
 
 function boulderdash:draw()
-	
+
 	camera:set()
 
 	for i, object in pairs(boulderdash.objects) do
@@ -170,8 +196,13 @@ function boulderdash:draw()
 	
 	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 	
-	if (boulderdash.diamonds >= levels[boulderdash.at_level].diamonds_to_get) then
+	if (boulderdash.diamonds >= 1) then -- levels[boulderdash.at_level].diamonds_to_get) then
 		love.graphics.print("Score ".. tostring(boulderdash.diamonds .. " Done."), 400, 10)
+		if not boulderdash.flash then
+			love.graphics.setBackgroundColor(255,255,255)
+			boulderdash.flash=true
+		end
+		
 	else
 		love.graphics.print("Score ".. tostring(boulderdash.diamonds), 400, 10)
 	end
