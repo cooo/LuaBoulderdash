@@ -65,6 +65,7 @@ function base:fall()
 		base.id = id(x,y+1)
 		-- put sp
 		boulderdash.objects[base.id] = base
+
 	
 	-- fall of rounded object (to the right)
 	elseif (boulderdash:find(x,y+1).rounded and boulderdash:find(x+1,y).type=="space" and boulderdash:find(x+1,y+1).type=="space") then
@@ -90,6 +91,8 @@ function base:fall()
 		-- put sp
 		boulderdash.objects[base.id] = base
 	
+	elseif (boulderdash:find(x,y+1).explode ) then
+		boulderdash:explode(id(x,y+1))
 	elseif (boulderdash:find(x,y+1).hard ) then
 	    base.falling = false
 	end

@@ -1,7 +1,8 @@
 local firefly = boulderdash.Derive("base")
 local faces = { "left", "up", "right", "down" }
+local directions = { {x=-1,y=0}, {x=0,y=-1}, {x=1,y=0}, {x=0,y=1} }
 local orientation = 1
-firefly.hard = true
+firefly.explode = true
 firefly.rounded = true
 firefly.images = {}
 firefly.sprite_index = 1
@@ -30,6 +31,7 @@ function firefly:load( x, y )
 end
 
 function firefly:update(dt)
+	self:isDeadlyToRockford()
 	self:move(dt)
 --	if (since(self.flash_timer) > self.flash_delay) then
 		self.sprite_index = self.sprite_index + 1
@@ -46,44 +48,49 @@ function firefly:draw()
 	love.graphics.drawq(img, self.images[self.sprite_index or 1], x*self.scale, y*self.scale)
 end
 
+function firefly:space_is_empty_to_the(direction)
+	if firefly:space_is_empty("left",  direction) then return true end
+	if firefly:space_is_empty("down",  direction) then return true end
+	if firefly:space_is_empty("right", direction) then return true end
+	if firefly:space_is_empty("up",    direction) then return true end	
+	return false
+end
+
+function firefly:space_is_empty(facing, d)
+	return (self.facing==facing) and (boulderdash:find(self.x+d.x, self.y+d.y).type == "space")
+end
+
 function firefly:move(dt)
-	local x, y = self:getPos()	
-	print("@ " .. x .. " " .. y .. " " .. firefly.facing)
-	
-	if ((faces[orientation]=="left") and (boulderdash:find(x,y+1).type == "space")) then
-		print("move down")
-		self:doMove(0,1)
+	local x, y = self:getPos()
+	local left_orientation = orientation - 1 -- turn left
+	if (left_orientation < 1) then left_orientation = 4 end
+	local left = directions[left_orientation]
+	local front = directions[orientation]
+		
+	if (firefly:space_is_empty_to_the(left)) then
 		self:rotateLeft()
-	elseif ((faces[orientation]=="down") and (boulderdash:find(x+1,y).type == "space")) then
-		print("move right")
-		self:doMove(1,0)
-		self:rotateLeft()
-	elseif ((faces[orientation]=="right") and (boulderdash:find(x,y-1).type == "space")) then
-	    print("move up")			    
-		self:doMove(0,-1)
-		self:rotateLeft()
-	elseif ((faces[orientation]=="up") and (boulderdash:find(x-1,y).type == "space")) then
-	    print("move left")
-		self:doMove(-1,0)
-		self:rotateLeft()
-	elseif ((faces[orientation]=="left") and (boulderdash:find(x-1,y).type == "space")) then
-	    print("move left")
-		self:doMove(-1,0)
-	elseif ((faces[orientation]=="down") and (boulderdash:find(x,y+1).type == "space")) then
-	    print("move down")
-		self:doMove(0,1)
-	elseif ((faces[orientation]=="right") and (boulderdash:find(x+1,y).type == "space")) then
-	    print("move right")
-		self:doMove(1,0)
-	elseif ((faces[orientation]=="up") and (boulderdash:find(x,y-1).type == "space")) then
-	    print("move up")
-		self:doMove(0,-1)
+		self:doMove(left.x, left.y)
+	elseif (firefly:space_is_empty_to_the(front)) then
+		self:doMove(front.x, front.y)
 	else
 		self:rotateRight()
-	end
-	local x, y = self:getPos()	
-	print("> " .. x .. " " .. y .. " " .. firefly.facing)
-		
+	end	
 end
+
+function firefly:isDeadlyToRockford()
+	local x, y = self:getPos()
+	for i,d in ipairs(directions) do
+		if firefly:rockford_is_close(d) then
+			print("rockford!")
+			boulderdash.dead = true
+		end
+	end
+	
+end
+
+function firefly:rockford_is_close(d)
+	return (boulderdash:find(self.x+d.x, self.y+d.y).type == "rockford")
+end
+
 
 return firefly

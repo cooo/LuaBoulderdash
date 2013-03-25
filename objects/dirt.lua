@@ -10,8 +10,7 @@ function dirt:update(dt)
 end
 
 function dirt:consume()
-
+	return true
 end
-
 
 return dirt

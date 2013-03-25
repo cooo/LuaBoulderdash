@@ -1,5 +1,6 @@
 require("camera")
 require("levels/levels")
+require("scoreboard")
 
 boulderdash = {}
 boulderdash.objects = {}
@@ -10,6 +11,7 @@ boulderdash.at_level = 0
 boulderdash.goal = {}
 boulderdash.done = true
 boulderdash.dead = false
+boulderdash.died = false
 boulderdash.start_over = false
 boulderdash.flash = false
 
@@ -48,6 +50,7 @@ function boulderdash:LevelUp()
 	self.objects = {}
 	self.at_level = self.at_level + 1
 	level = levels[self.at_level].playfield
+
 	for y,i in pairs(level) do
 		for x,j in pairs(level[y]) do
 			boulderdash.Create( object_map[level[y][x]], x-1, y )
@@ -57,10 +60,13 @@ function boulderdash:LevelUp()
 	local xc,yc = boulderdash:Replace("rockford", "entrance")
 
 	self.done = false
+	boulderdash.flash = false
 	boulderdash.dead = false
+	boulderdash.died = false
 	boulderdash.start_over = false
 	boulderdash.diamonds = 0
-
+	delay = 0.05
+	scoreboard:load()
 
 	if (xc<11)then
 		xc = 0
@@ -80,10 +86,12 @@ function boulderdash:LevelUp()
 	end
 	
 	print(xc .. " " .. yc)
+	camera:setPosition(0,0)
     camera:move(xc*32,yc*32)
 end
 
 function boulderdash:Replace(find, replace)
+	print("boulderdash:Replace" .. find .. "," .. replace)
 	-- find rockford, and replace him with an entrance
 	for i, object in pairs(boulderdash.objects) do
 		if ((object.type == find) or (object.id == find)) then
@@ -93,7 +101,6 @@ function boulderdash:Replace(find, replace)
 	end
 	
 end
-
 
 function boulderdash.Create(name, x, y)
 	x = x or 0
@@ -118,8 +125,8 @@ function boulderdash:getGoal()
 	return self.goal
 end
 
-function boulderdash:explode()
-	local x,y = boulderdash:Replace("rockford", "explode")
+function boulderdash:explode(find)
+	local x,y = boulderdash:Replace(find, "explode")
 
 	boulderdash:canExplode( x+1, y )
 	boulderdash:canExplode( x-1, y )
@@ -130,7 +137,10 @@ function boulderdash:explode()
 	boulderdash:canExplode( x, y+1 )
 	boulderdash:canExplode( x-1, y+1 )
 
-	boulderdash.dead = false -- to prevent starting the explode sequence again
+	if (find=="rockford") then
+		boulderdash.dead = false -- to prevent starting the explode sequence again
+		boulderdash.died = true -- to signal
+	end
 
 end
 
@@ -149,6 +159,7 @@ end
 
 function boulderdash:update(dt)
 	if delay_dt > delay then
+		scoreboard:update(dt)
 		for i, object in pairs(boulderdash.objects) do
 			if object.update then
 				if not object.moved then
@@ -187,25 +198,10 @@ function boulderdash:draw()
 			object:draw()
 		end
 	end
-	
 	camera:unset()
 	
-	-- draw a scoreboard on top
-	love.graphics.setColor(0,0,0)
-	love.graphics.rectangle("fill", 0, 0, screen_width, 32 )
-	
-	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
-	
-	if (boulderdash.diamonds >= 1) then -- levels[boulderdash.at_level].diamonds_to_get) then
-		love.graphics.print("Score ".. tostring(boulderdash.diamonds .. " Done."), 400, 10)
-		if not boulderdash.flash then
-			love.graphics.setBackgroundColor(255,255,255)
-			boulderdash.flash=true
-		end
+	scoreboard:draw()	
+
 		
-	else
-		love.graphics.print("Score ".. tostring(boulderdash.diamonds), 400, 10)
-	end
-	
 end
 

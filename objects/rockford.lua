@@ -32,13 +32,13 @@ function rockford:load( x, y )
 	end
 	
 	self:setPos( x, y )
+	boulderdash:setGoal( x, y )
 end
 
 function rockford:update(dt)
 	self:move(dt)
 	self:he_might_die()
 	self:wink()
-	self:are_we_done()
 end
 
 function rockford:default()
@@ -47,10 +47,12 @@ end
 
 -- move him around or grab something
 function rockford:move(dt)
-	if love.keyboard.isDown("right") then self:LeftOrRight( 1, love.keyboard.isDown(" ")) end
-	if love.keyboard.isDown("down")  then self:UpOrDown   ( 1, love.keyboard.isDown(" ")) end
-	if love.keyboard.isDown("left")  then self:LeftOrRight(-1, love.keyboard.isDown(" ")) end
-	if love.keyboard.isDown("up")    then self:UpOrDown   (-1, love.keyboard.isDown(" ")) end
+	if not boulderdash.done then
+		if love.keyboard.isDown("right") then self:LeftOrRight( 1, love.keyboard.isDown(" ")) end
+		if love.keyboard.isDown("down")  then self:UpOrDown   ( 1, love.keyboard.isDown(" ")) end
+		if love.keyboard.isDown("left")  then self:LeftOrRight(-1, love.keyboard.isDown(" ")) end
+		if love.keyboard.isDown("up")    then self:UpOrDown   (-1, love.keyboard.isDown(" ")) end
+	end
 end
 
 -- when a rock or diamond falls on his head rockford dies
@@ -88,20 +90,6 @@ function rockford:wink()
 	end
 end
 
-function rockford:are_we_done()
-	local xr,yr = self:getPos()
-	local goal = boulderdash:getGoal()
-	
-	-- we could just compare x's en y's, but the distance is more fun
-	local distance_to_goal = math.sqrt( math.abs(xr-goal.x)^2 + math.abs(yr-goal.y)^2 )
-	
-	if (distance_to_goal == 0) then
-		print("we're done")
-		-- add timeleft to score
-		boulderdash.setDone()
-	end
-	
-end
 
 
 function rockford:LeftOrRight(x, grab)
@@ -143,15 +131,15 @@ function rockford:canMove(x,y)
 		return false
 	end
 	idle_time = love.timer.getMicroTime()	-- the start of idle time
-	rockford:consume(object)
-	return true
+
+	return rockford:consume(object)
 end
 
 function rockford:doMoveRockford(x,y)
 
 	local xr,yr = self:getPos()
 	self:doMove(x,y)
-
+	boulderdash:setGoal( xr+x, yr+y )
 	-- xr -> xxr
 	-- 10 -> 11 no move
 	-- 11 -> 10 no move
@@ -163,8 +151,6 @@ function rockford:doMoveRockford(x,y)
 	if ((yr>7 and yr+y>7) and (yr<13 and yr+y<13)) then
 		camera:move(0,y*self.scale)
 	end
-	local x,y = camera:getPosition()
-	print("cam @ " .. x/32 .. ", " .. y/32)
 	
 end
 
@@ -176,7 +162,9 @@ end
 
 function rockford:consume(object)
 	if object.consume then
-		object:consume()
+		return object:consume()
+	else
+		return true
 	end
 end
 

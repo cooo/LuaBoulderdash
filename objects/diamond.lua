@@ -25,7 +25,14 @@ function diamond:draw()
 end
 
 function diamond:consume()
+	print("diamond")
 	boulderdash.diamonds = boulderdash.diamonds + 1
+	if (boulderdash.diamonds < levels[boulderdash.at_level].diamonds_to_get)  then
+		scoreboard.score = scoreboard.score + scoreboard.diamonds_are_worth
+	else
+		scoreboard.score = scoreboard.score + scoreboard.extra_diamonds_are_worth
+	end
+	return true
 end
 
 return diamond

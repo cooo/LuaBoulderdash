@@ -12,8 +12,6 @@ function outbox:load( x, y )
 	self:setImage(     love.graphics.newImage( boulderdash.imgpath .. "steel.png" ))
 	self:setFlashImage(love.graphics.newImage( boulderdash.imgpath .. "outbox.png"))
 	self:setPos ( x, y )
-	
-	boulderdash:setGoal( x, y )
 end
 
 
@@ -23,6 +21,16 @@ function outbox:update(dt)
 			self.flash_image, self.img = self.img, self.flash_image -- lua's swap trick without temp
 			outbox.flash_timer = reset_time()
 		end
+	end
+end
+
+function outbox:consume()
+	if not outbox.hard then
+		boulderdash:Replace("x" .. 1 .. "y" .. 1, "leaving")
+		boulderdash.setDone()
+		return true
+	else
+		return false
 	end
 end
 
@@ -37,6 +45,5 @@ function outbox:draw()
 	local img = self:getImage()
 	love.graphics.draw(img, x*self.scale, y*self.scale, 0, 2, 2)
 end
-
 
 return outbox

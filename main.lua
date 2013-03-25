@@ -11,7 +11,7 @@ function love.load()
 	love.graphics.setColorMode("replace")
 	screen_width = love.graphics.getWidth()	
 	boulderdash:Startup()
-
+	boulderdash:LevelUp()
 end
 
 
@@ -19,16 +19,13 @@ function love.update(dt)
 	if gamePaused then return end
 	
 	if boulderdash.dead then
-		boulderdash:explode()
+		boulderdash:explode("rockford")
 	end
-	if not boulderdash.done then
-		if not boulderdash.start_over then
-			boulderdash:update(dt)
-		else
-			boulderdash:startOver()
-		end
+
+	if not boulderdash.start_over then
+		boulderdash:update(dt)
 	else
-		boulderdash:LevelUp()
+		boulderdash:startOver()
 	end
 end
 

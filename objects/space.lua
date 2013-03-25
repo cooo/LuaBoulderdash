@@ -5,12 +5,9 @@ function space:load( x, y )
 	self:setPos( x, y )
 end
 
-function space:update(dt)
-
+-- we need this empty function to prevent the base:draw call
+function space:draw()
 end
 
-function space:draw()	
-
-end
 
 return space
