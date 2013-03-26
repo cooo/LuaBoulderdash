@@ -124,7 +124,6 @@ function rockford:canMove(x,y)
 	local object = boulderdash:find(xr+x,yr+y)
 
 	if (object.hard and not object.consume) then
-		print(object.type)
 		if (object.push) then
 			object:push(x)
 		end

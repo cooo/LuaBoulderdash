@@ -6,6 +6,8 @@ scoreboard.diamonds_to_get = 0
 scoreboard.diamonds_are_worth = 0
 scoreboard.extra_diamonds_are_worth = 0
 scoreboard.score = 0
+scoreboard.numbers_white_img = nil -- move this to a numbers.lua
+
 
 function scoreboard:load()
 	self.countdown                = levels[boulderdash.at_level].cave_time
@@ -13,6 +15,14 @@ function scoreboard:load()
 	self.diamonds_are_worth       = levels[boulderdash.at_level].diamonds_are_worth
 	self.extra_diamonds_are_worth = levels[boulderdash.at_level].extra_diamonds_are_worth
 	self.one_second_timer         = reset_time()
+	
+	scoreboard.numbers_white_img = love.graphics.newImage( boulderdash.imgpath .. "numbers_white.png")
+
+	for i=0, 32*(8-1), 32 do
+		table.insert( self.images, love.graphics.newQuad(i, 0, 32, 32, 32*8, 32) )
+	end
+	
+	
 end
 
 function scoreboard:update(dt)

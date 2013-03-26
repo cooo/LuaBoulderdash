@@ -85,21 +85,18 @@ function boulderdash:LevelUp()
 		yc = yc - 7
 	end
 	
-	print(xc .. " " .. yc)
 	camera:setPosition(0,0)
     camera:move(xc*32,yc*32)
 end
 
 function boulderdash:Replace(find, replace)
-	print("boulderdash:Replace" .. find .. "," .. replace)
 	-- find rockford, and replace him with an entrance
 	for i, object in pairs(boulderdash.objects) do
 		if ((object.type == find) or (object.id == find)) then
 			boulderdash.Create( replace, object.x, object.y )
 			return object.x, object.y
 		end
-	end
-	
+	end	
 end
 
 function boulderdash.Create(name, x, y)
@@ -125,6 +122,7 @@ function boulderdash:getGoal()
 	return self.goal
 end
 
+
 function boulderdash:explode(find)
 	local x,y = boulderdash:Replace(find, "explode")
 
@@ -139,7 +137,7 @@ function boulderdash:explode(find)
 
 	if (find=="rockford") then
 		boulderdash.dead = false -- to prevent starting the explode sequence again
-		boulderdash.died = true -- to signal
+		boulderdash.died = true  -- to signal rockford just died
 	end
 
 end

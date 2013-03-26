@@ -40,7 +40,7 @@ function firefly:update(dt)
 			self.sprite_index = 1
 		end
 --	end
-	end
+end
 
 function firefly:draw()
 	local x, y = self:getPos()	
@@ -81,7 +81,6 @@ function firefly:isDeadlyToRockford()
 	local x, y = self:getPos()
 	for i,d in ipairs(directions) do
 		if firefly:rockford_is_close(d) then
-			print("rockford!")
 			boulderdash.dead = true
 		end
 	end
