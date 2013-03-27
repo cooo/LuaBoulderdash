@@ -196,10 +196,11 @@ function boulderdash:draw()
 			object:draw()
 		end
 	end
+
 	camera:unset()
 	
 	scoreboard:draw()	
-
+love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 750, 10)
 		
 end
 
