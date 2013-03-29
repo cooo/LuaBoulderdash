@@ -26,10 +26,9 @@ function scoreboard.Create(name, x, y, i)
 	y = y or 0
 
 	local object = scoreboard.number_lua()
-	object:load(x,y)
+	object:load(x,y,i)
 	object.type = name
 	object.id = id(x,y)
-	object.i = i
 	scoreboard.matrix[object.id] = object
 	return object
 end
@@ -38,18 +37,26 @@ end
 function scoreboard:update(dt)
 	if (since(self.one_second_timer) > self.one_second) then
 		self.countdown = self.countdown - 1
+		if (self.countdown <= 0) then
+			-- explode too?
+			self.countdown = 0
+			boulderdash.dead = true -- to prevent starting the explode sequence again
+		end
 		self.one_second_timer = reset_time()
-		scoreboard:diamonds()
 	end
+	scoreboard:diamonds()
 end
 
-
 function scoreboard:draw_on_board(str, x)
-	local board_to_get = {}
-	string.gsub(str, "(.)", function(x) table.insert(board_to_get, x) end)
 	
-	for i, digit in pairs(board_to_get) do
-		scoreboard.Create( "number", x+(i*36), 5, digit )
+	if (x>=0) then
+		local board_to_get = {}
+		string.gsub(str, "(.)", function(x) table.insert(board_to_get, x) end)
+	
+		for i, digit in pairs(board_to_get) do
+			-- TODO: take this stuff out of the loop
+			scoreboard.Create( "number", x+(i*36), 5, digit )
+		end
 	end
 end
 
@@ -65,10 +72,10 @@ function scoreboard:diamonds()
 		
 	scoreboard:draw_on_board(self.diamonds_to_get, 10)
 	scoreboard:draw_on_board(self.diamonds_are_worth, 100)
-
+	
 	scoreboard:draw_on_board(boulderdash.diamonds, 250)
-
-	scoreboard:draw_on_board(self.countdown, 350)
+	
+	scoreboard:draw_on_board(string.rjust(self.countdown,3,"0"), 350)
 	scoreboard:draw_on_board(string.rjust(self.score,6,"0"), 500) -- format with 6 positions
 	
 end

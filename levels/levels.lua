@@ -42,7 +42,7 @@ level1.playfield = {
 level1.diamonds_to_get          =  12
 level1.diamonds_are_worth       =  10
 level1.extra_diamonds_are_worth =  15
-level1.cave_time                = 150
+level1.cave_time                = 15
 
 local level2 = {}
 -- level2.playfield = {
