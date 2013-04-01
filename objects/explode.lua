@@ -4,7 +4,7 @@ explode.sprite_index = 1
 explode.end_frame = 5
 explode.flash_delay = 0.1
 explode.flash_timer = 0
-
+explode.to = "space"
 function explode:load( x, y )
 	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "explode.png" ))
 	for i=0, 32*(5-1), 32 do
@@ -19,7 +19,7 @@ function explode:update(dt)
 		self.sprite_index = self.sprite_index + 1
 		if (self.sprite_index >= self.end_frame) then
 			self.sprite_index = self.end_frame
-			boulderdash:Replace(self.id, "space")
+			boulderdash:Replace(self.id, explode.to)
 			if (boulderdash.died) then boulderdash.start_over = true end
 		end
 		self.flash_timer = reset_time()

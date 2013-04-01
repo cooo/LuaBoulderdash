@@ -33,6 +33,10 @@ function boulderdash:find(x,y)
 	return boulderdash.objects[id(x,y)]
 end
 
+function boulderdash:find_by_id(find)
+	return boulderdash.objects[find]
+end
+
 
 function boulderdash:Startup()
 	-- register everything in the boulderdash.objpath folder
@@ -99,14 +103,20 @@ function boulderdash:Replace(find, replace)
 	end	
 end
 
-function boulderdash.Create(name, x, y)
+function boulderdash.Create(name, x, y, explode_to)
 	x = x or 0
 	y = y or 0
+	if explode_to then
+		print(name .. ' ' .. explode_to)
+	end
 	if register[name] then
 		local object = register[name]()
 		object:load(x,y)
 		object.type = name
 		object.id = id(x,y)
+		if explode_to then
+			object.to = explode_to
+		end
 		boulderdash.objects[object.id] = object
 		return object
 	else
@@ -124,16 +134,22 @@ end
 
 
 function boulderdash:explode(find)
-	local x,y = boulderdash:Replace(find, "explode")
+	local object = boulderdash:find_by_id(find)
+	local explode_to = nil
+	if object and object.explode_to_diamonds then
+		explode_to = "diamond"
+	end
 
-	boulderdash:canExplode( x+1, y )
-	boulderdash:canExplode( x-1, y )
-	boulderdash:canExplode( x+1, y-1 )
-	boulderdash:canExplode( x, y-1 )
-	boulderdash:canExplode( x-1, y-1 )
-	boulderdash:canExplode( x+1, y+1 )
-	boulderdash:canExplode( x, y+1 )
-	boulderdash:canExplode( x-1, y+1 )
+	local x,y = boulderdash:Replace(find, "space")
+	boulderdash:canExplode( x  , y  , explode_to )
+	boulderdash:canExplode( x+1, y  , explode_to )
+	boulderdash:canExplode( x-1, y  , explode_to )
+	boulderdash:canExplode( x+1, y-1, explode_to )
+	boulderdash:canExplode( x  , y-1, explode_to )
+	boulderdash:canExplode( x-1, y-1, explode_to )
+	boulderdash:canExplode( x+1, y+1, explode_to )
+	boulderdash:canExplode( x  , y+1, explode_to )
+	boulderdash:canExplode( x-1, y+1, explode_to )
 
 	if (find=="rockford") then
 		boulderdash.dead = false -- to prevent starting the explode sequence again
@@ -142,9 +158,9 @@ function boulderdash:explode(find)
 
 end
 
-function boulderdash:canExplode(x,y)
+function boulderdash:canExplode(x,y, explode_to)
 	if not (boulderdash:find(x,y).type == "steel") then
-		boulderdash.Create( "explode", x, y )
+		boulderdash.Create( "explode", x, y, explode_to )  -- default is explode_to space
 	end
 end
 
@@ -162,8 +178,7 @@ function boulderdash:update(dt)
 			if object.update then
 				if not object.moved then
 					object:update(dt)
-				else
-					object.moved = false
+					object.moved = true
 				end	
 			end
 		end
@@ -194,6 +209,7 @@ function boulderdash:draw()
 	for i, object in pairs(boulderdash.objects) do
 		if object.draw then
 			object:draw()
+			object.moved = false
 		end
 	end
 
