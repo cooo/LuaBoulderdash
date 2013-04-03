@@ -14,6 +14,7 @@ boulderdash.dead = false
 boulderdash.died = false
 boulderdash.start_over = false
 boulderdash.flash = false
+boulderdash.keypressed = {}
 
 local register = {}
 

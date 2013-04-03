@@ -47,11 +47,20 @@ end
 
 -- move him around or grab something
 function rockford:move(dt)
-	if not boulderdash.done then
-		if love.keyboard.isDown("right") then self:LeftOrRight( 1, love.keyboard.isDown(" ")) end
-		if love.keyboard.isDown("down")  then self:UpOrDown   ( 1, love.keyboard.isDown(" ")) end
-		if love.keyboard.isDown("left")  then self:LeftOrRight(-1, love.keyboard.isDown(" ")) end
-		if love.keyboard.isDown("up")    then self:UpOrDown   (-1, love.keyboard.isDown(" ")) end
+
+	if not boulderdash.done and not rockford.moved then
+		if     love.keyboard.isDown("right") then self:LeftOrRight( 1, love.keyboard.isDown(" ")) 
+		elseif love.keyboard.isDown("down")  then self:UpOrDown   ( 1, love.keyboard.isDown(" ")) 
+		elseif love.keyboard.isDown("left")  then self:LeftOrRight(-1, love.keyboard.isDown(" ")) 
+		elseif love.keyboard.isDown("up")    then self:UpOrDown   (-1, love.keyboard.isDown(" "))
+		elseif (#boulderdash.keypressed > 0) then
+			local key = table.remove(boulderdash.keypressed, 1)
+			if     (key=="right") then self:LeftOrRight( 1, love.keyboard.isDown(" ")) 
+			elseif (key=="down")  then self:UpOrDown   ( 1, love.keyboard.isDown(" ")) 
+			elseif (key=="left")  then self:LeftOrRight(-1, love.keyboard.isDown(" ")) 
+			elseif (key=="up")    then self:UpOrDown   (-1, love.keyboard.isDown(" "))
+			end
+		end
 	end
 end
 
@@ -93,6 +102,8 @@ end
 
 
 function rockford:LeftOrRight(x, grab)
+	print("rockford l.r.")
+	table.remove(boulderdash.keypressed, 1)
 	if self:canMove( x, 0 ) then
 		if grab then
 			self:doGrabRockford( x, 0 )
@@ -108,6 +119,8 @@ function rockford:LeftOrRight(x, grab)
 end
 
 function rockford:UpOrDown(y, grab)
+	print("rockford u.d.")
+	table.remove(boulderdash.keypressed, 1)
 	if self:canMove( 0, y ) then
 		if grab then
 			self:doGrabRockford( 0, y )
