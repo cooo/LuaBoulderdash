@@ -149,7 +149,7 @@ level4.cave_time                = 120
 
 
 
-table.insert(levels, level4)
+table.insert(levels, level1)
 table.insert(levels, level2)
 table.insert(levels, level3)
 table.insert(levels, level4)
