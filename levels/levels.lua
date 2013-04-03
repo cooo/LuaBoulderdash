@@ -43,18 +43,9 @@ level1.playfield = {
 level1.diamonds_to_get          =  12
 level1.diamonds_are_worth       =  10
 level1.extra_diamonds_are_worth =  15
-level1.cave_time                = 15
+level1.cave_time                = 150
 
 local level2 = {}
--- level2.playfield = {
--- 		{ "S","S","S","S","S","S","S","S","S","S","S" },
--- 		{ "S","X",".",".",".",".",".",".",".",".","S" },
--- 		{ "S",".",".","."," ",".",".",".",".","r","S" },
--- 		{ "S",".","d",".",".",".",".",".","r","P","S" },
--- 		{ "S","S","S","S","S","S","S","S","S","S","S" }
--- 		}
-
-
 level2.playfield = {		
 		{ "S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S" },
 		{ "S",".","r",".",".","r",".",".","W",".","r",".",".",".","d",".","W",".",".","."," ",".","r",".","W","r",".",".",".",".",".",".","W",".",".","r","r",".",".","S" },
@@ -79,7 +70,7 @@ level2.playfield = {
 		{ "S",".","r",".",".",".","."," ","W",".","."," ",".",".","r",".","W",".","P","."," ",".",".",".","W",".",".",".",".","r",".","r","W",".",".",".","."," ",".","S" },
 		{ "S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S" },
 		}
-level2.diamonds_to_get          =  10
+level2.diamonds_to_get          =  1
 level2.diamonds_are_worth       =  20
 level2.extra_diamonds_are_worth =  50
 level2.cave_time                = 150
@@ -149,7 +140,7 @@ level4.cave_time                = 120
 
 
 
-table.insert(levels, level1)
+table.insert(levels, level2)
 table.insert(levels, level2)
 table.insert(levels, level3)
 table.insert(levels, level4)

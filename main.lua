@@ -5,7 +5,7 @@ function love.load()
 	t_minus_zero = reset_time()
 	idle_time = reset_time()
 	gamePaused = false
-	delay = 0.05
+	delay = 0.10
 	delay_dt = 0
 
 	love.graphics.setColorMode("replace")
@@ -40,12 +40,7 @@ function love.keypressed(key, unicode)
 	table.insert(boulderdash.keypressed, key)
 	print("main " .. key)
 	if key=="d" then
-		for i,object in pairs(boulderdash.objects) do
-			--if (object.type=="space") then
-			if (object.x==4 and object.y==3) then
-				print(object.x .. "," .. object.y .. ": " .. object.id .. object.type)
-			end
-		end
+		print(boulderdash.i)
 	end
 end
 

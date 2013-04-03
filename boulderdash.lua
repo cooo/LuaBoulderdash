@@ -15,6 +15,7 @@ boulderdash.died = false
 boulderdash.start_over = false
 boulderdash.flash = false
 boulderdash.keypressed = {}
+boulderdash.i = 0
 
 local register = {}
 
@@ -70,7 +71,7 @@ function boulderdash:LevelUp()
 	boulderdash.died = false
 	boulderdash.start_over = false
 	boulderdash.diamonds = 0
-	delay = 0.05
+	delay = 0.1
 	scoreboard:load()
 
 	if (xc<11)then
@@ -111,6 +112,7 @@ function boulderdash.Create(name, x, y, explode_to)
 		print(name .. ' ' .. explode_to)
 	end
 	if register[name] then
+		boulderdash.i=boulderdash.i+1
 		local object = register[name]()
 		object:load(x,y)
 		object.type = name
@@ -206,18 +208,16 @@ end
 function boulderdash:draw()
 
 	camera:set()
-
-	for i, object in pairs(boulderdash.objects) do
-		if object.draw then
-			object:draw()
-			object.moved = false
+		for i, object in pairs(boulderdash.objects) do
+			if object.draw then
+				object:draw()
+				object.moved = false
+			end
 		end
-	end
-
 	camera:unset()
 	
-	scoreboard:draw()	
-love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 750, 10)
+	scoreboard:draw()
+	love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 750, 10)
 		
 end
 

@@ -69,7 +69,7 @@ function rockford:he_might_die()
 	local xr,yr = self:getPos()
 	
 	local object = boulderdash:find(xr,yr-1)
-	if (object.falling) then
+	if (object.falling and not boulderdash.done) then
 		print("game over")
 		boulderdash.dead = true
 	end

@@ -51,46 +51,34 @@ function base:doMove(x,y)
 	boulderdash.objects[space.id] = space
 end
 
+-- swap base with whatever is at x,y
+local function swap(base, x,y)
+	base.falling = true
+
+	-- swap base with whatever
+	local whatever = boulderdash:find(x,y)
+	whatever:setPos(base.x,base.y)
+	whatever.id = base.id
+	boulderdash.objects[whatever.id] = whatever
+	
+	-- move base
+	base:setPos(x,y)
+	base.id = id(x,y)
+	boulderdash.objects[base.id] = base
+end
+
 function base:fall()
 	local x,y = base:getPos()
 
 	-- fall straight down
 	if (boulderdash:find(x,y+1).type == "space") then
-		base.falling = true
-		-- create space
-		local space = boulderdash.Create( "space", x, y )
-		boulderdash.objects[space.id] = space
-		-- move rock
-		base:setPos(x,y+1)
-		base.id = id(x,y+1)
-		-- put sp
-		boulderdash.objects[base.id] = base
-
-	
-	-- fall of rounded object (to the right)
-	elseif (boulderdash:find(x,y+1).rounded and boulderdash:find(x+1,y).type=="space" and boulderdash:find(x+1,y+1).type=="space") then
-		base.falling = true
-		-- create space
-		local space = boulderdash.Create( "space", x, y )
-		boulderdash.objects[space.id] = space
-		-- move rock
-		base:setPos(x+1,y+1)
-		base.id = id(x+1,y+1)
-		-- put sp
-		boulderdash.objects[base.id] = base
-
+		swap(base, x, y+1)
 	-- fall of rounded object (to the left)
 	elseif (boulderdash:find(x,y+1).rounded and boulderdash:find(x-1,y).type=="space" and boulderdash:find(x-1,y+1).type=="space") then
-		base.falling = true
-		-- create space
-		local space = boulderdash.Create( "space", x, y )
-		boulderdash.objects[space.id] = space
-		-- move rock
-		base:setPos(x-1,y+1)
-		base.id = id(x-1,y+1)
-		-- put sp
-		boulderdash.objects[base.id] = base
-	
+		swap(base, x-1, y+1)	
+	-- fall of rounded object (to the right)
+	elseif (boulderdash:find(x,y+1).rounded and boulderdash:find(x+1,y).type=="space" and boulderdash:find(x+1,y+1).type=="space") then
+		swap(base, x+1, y+1)
 	elseif (boulderdash:find(x,y+1).explode ) then
 		boulderdash:explode(id(x,y+1))
 	elseif (boulderdash:find(x,y+1).hard ) then

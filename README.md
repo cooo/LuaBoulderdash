@@ -3,7 +3,7 @@ LuaBoulderdash
 
 a Boulderdash clone created in Lua using the LÖVE game engine
 
-An exercise in developing games. (Work in progress)
+An exercise in developing games. (Work in progress, 4 playable levels)
 
 You need the [LÖVE](https://love2d.org/) game engine
 
