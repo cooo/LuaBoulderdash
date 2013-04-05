@@ -38,9 +38,8 @@ function love.keypressed(key, unicode)
 	idle_time = love.timer.getMicroTime()	-- the start of idle time
 	debug = {}
 	table.insert(boulderdash.keypressed, key)
-	print("main " .. key)
 	if key=="d" then
-		print(boulderdash.i)
+		-- print some debug stuff here
 	end
 end
 

@@ -15,7 +15,6 @@ boulderdash.died = false
 boulderdash.start_over = false
 boulderdash.flash = false
 boulderdash.keypressed = {}
-boulderdash.i = 0
 
 local register = {}
 
@@ -112,7 +111,6 @@ function boulderdash.Create(name, x, y, explode_to)
 		print(name .. ' ' .. explode_to)
 	end
 	if register[name] then
-		boulderdash.i=boulderdash.i+1
 		local object = register[name]()
 		object:load(x,y)
 		object.type = name

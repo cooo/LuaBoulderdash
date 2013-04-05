@@ -70,7 +70,7 @@ level2.playfield = {
 		{ "S",".","r",".",".",".","."," ","W",".","."," ",".",".","r",".","W",".","P","."," ",".",".",".","W",".",".",".",".","r",".","r","W",".",".",".","."," ",".","S" },
 		{ "S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S" },
 		}
-level2.diamonds_to_get          =  1
+level2.diamonds_to_get          =  10
 level2.diamonds_are_worth       =  20
 level2.extra_diamonds_are_worth =  50
 level2.cave_time                = 150
@@ -140,7 +140,7 @@ level4.cave_time                = 120
 
 
 
-table.insert(levels, level2)
+table.insert(levels, level1)
 table.insert(levels, level2)
 table.insert(levels, level3)
 table.insert(levels, level4)

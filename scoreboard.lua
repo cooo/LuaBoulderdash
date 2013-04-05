@@ -21,6 +21,18 @@ function scoreboard:load()
 	scoreboard:diamonds()
 end
 
+-- finds a digit on the scoreboard and change it to i, create it if not found
+function scoreboard:find_or_create(name, x, y, i)
+	if scoreboard.matrix[id( x,y )] then
+		local number = scoreboard.matrix[id( x,y )]
+		number:setPos( x, y )
+		number:set_index( i )
+		number.id = id( x,y )
+	else
+		scoreboard.Create( name, x, y, i )
+	end
+end
+
 function scoreboard.Create(name, x, y, i)
 	x = x or 0
 	y = y or 0
@@ -54,8 +66,7 @@ function scoreboard:draw_on_board(str, x)
 		string.gsub(str, "(.)", function(x) table.insert(board_to_get, x) end)
 	
 		for i, digit in pairs(board_to_get) do
-			-- TODO: take this stuff out of the loop
-			scoreboard.Create( "number", x+(i*36), 5, digit )
+			scoreboard:find_or_create( "number", x+(i*36), 5, digit )
 		end
 	end
 end
@@ -70,13 +81,11 @@ end
 
 function scoreboard:diamonds()
 		
-	scoreboard:draw_on_board(self.diamonds_to_get, 10)
-	scoreboard:draw_on_board(self.diamonds_are_worth, 100)
-	
-	scoreboard:draw_on_board(boulderdash.diamonds, 250)
-	
-	scoreboard:draw_on_board(string.rjust(self.countdown,3,"0"), 350)
-	scoreboard:draw_on_board(string.rjust(self.score,6,"0"), 500) -- format with 6 positions
+	scoreboard:draw_on_board(self.diamonds_to_get,                  10)
+	scoreboard:draw_on_board(self.diamonds_are_worth,              100)
+	scoreboard:draw_on_board(boulderdash.diamonds,                 250)
+	scoreboard:draw_on_board(string.rjust(self.countdown, 3, "0"), 350)
+	scoreboard:draw_on_board(string.rjust(self.score,     6, "0"), 500) -- format with 6 positions
 	
 end
 
@@ -100,15 +109,5 @@ function scoreboard:draw()
 			boulderdash.flash=true
 		end
 	end
-	
-	
-	
-	-- love.graphics.print(self.diamonds_to_get .. " " .. self.diamonds_are_worth, 50, 10)
-	-- love.graphics.print(boulderdash.diamonds, 100, 10)
-	-- 
-	-- love.graphics.print("Score ".. tostring(self.score), 400, 10)
-	-- 
-	-- love.graphics.print("Time " .. self.countdown, 600, 10)
-	-- 
-	
+		
 end
