@@ -54,7 +54,7 @@ end
 -- swap base with whatever is at x,y
 local function swap(base, x,y)
 	base.falling = true
-
+	
 	-- swap base with whatever
 	local whatever = boulderdash:find(x,y)
 	whatever:setPos(base.x,base.y)
@@ -81,7 +81,7 @@ function base:fall()
 		swap(base, x+1, y+1)
 	elseif (boulderdash:find(x,y+1).explode ) then
 		boulderdash:explode(id(x,y+1))
-	elseif (boulderdash:find(x,y+1).hard ) then
+	elseif (boulderdash:find(x,y+1).hard and boulderdash:find(x,y+1).falling ) then
 	    base.falling = false
 	end
 	

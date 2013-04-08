@@ -10,6 +10,7 @@ function dirt:update(dt)
 end
 
 function dirt:consume()
+	boulderdash.sounds.eat_dirt:play()
 	return true
 end
 

@@ -1,4 +1,6 @@
+require("lib/strings")
 require("boulderdash")
+require("levels/load")
 
 function love.load()
 
@@ -10,6 +12,9 @@ function love.load()
 
 	love.graphics.setColorMode("replace")
 	screen_width = love.graphics.getWidth()	
+	
+	level_loader:load()
+		
 	boulderdash:Startup()
 	boulderdash:LevelUp()
 end

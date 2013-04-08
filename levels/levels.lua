@@ -12,6 +12,20 @@ object_map = {
 }
 
 
+object_map2 = {
+	W     = "steel",
+	w     = "wall",
+	r     = "rock",
+	d     = "diamond",
+	["."] = "dirt",
+	P     = "rockford",
+	X     = "outbox",
+	q     = "firefly",
+	c     = "butterfly",
+	[" "] = "space",
+	M	  = "magic_wall"
+}
+
 levels = {}
 
 local level1 = {}
@@ -140,7 +154,7 @@ level4.cave_time                = 120
 
 
 
-table.insert(levels, level1)
+table.insert(levels, level4)
 table.insert(levels, level2)
 table.insert(levels, level3)
 table.insert(levels, level4)

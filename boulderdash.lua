@@ -3,9 +3,11 @@ require("levels/levels")
 require("scoreboard")
 
 boulderdash = {}
-boulderdash.objects = {}
-boulderdash.objpath = "objects/"
-boulderdash.imgpath = "images/"
+boulderdash.objpath   = "objects/"
+boulderdash.objects   = {}
+boulderdash.imgpath   = "images/"
+boulderdash.soundpath = "sound/"
+boulderdash.sounds    = {}
 boulderdash.diamonds = 0
 boulderdash.at_level = 0
 boulderdash.goal = {}
@@ -39,9 +41,10 @@ function boulderdash:find_by_id(find)
 end
 
 
-function boulderdash:Startup()
+
+local function registerObjects()
 	-- register everything in the boulderdash.objpath folder
-	files = love.filesystem.enumerate( boulderdash.objpath )
+	local files = love.filesystem.enumerate( boulderdash.objpath )
 	for k, file in ipairs(files) do
 		if not (file == "base.lua") then
 			local obj_name = string.sub(file,1,string.find(file, ".lua") - 1)
@@ -50,15 +53,41 @@ function boulderdash:Startup()
 	end
 end
 
+local function loadSounds()
+	local sounds = love.filesystem.enumerate( boulderdash.soundpath )	
+	for k, sound in ipairs(sounds) do
+		if string.find(sound, ".ogg") then
+			local sound_name = string.sub(sound,1,string.find(sound, ".ogg") - 1)
+			boulderdash.sounds[sound_name] = love.audio.newSource(boulderdash.soundpath .. sound)
+		end
+	end
+end
+
+function boulderdash:Startup()
+	registerObjects()
+	loadSounds()
+end
+
+
+local function lookup(letter)
+	object = object_map2[letter]
+	if object then
+		return object
+	else
+		print("cannot find " .. letter)
+		return "space"
+	end
+end
+
 function boulderdash:LevelUp()	
 
 	self.objects = {}
 	self.at_level = self.at_level + 1
-	level = levels[self.at_level].playfield
-
+--	level = levels[self.at_level].playfield
+    level = level_loader.games[1].caves[self.at_level].map
 	for y,i in pairs(level) do
 		for x,j in pairs(level[y]) do
-			boulderdash.Create( object_map[level[y][x]], x-1, y )
+			boulderdash.Create( lookup(level[y][x]), x-1, y )
 		end
 	end
 
@@ -70,6 +99,13 @@ function boulderdash:LevelUp()
 	boulderdash.died = false
 	boulderdash.start_over = false
 	boulderdash.diamonds = 0
+	boulderdash.magictime = level_loader.games[1].caves[boulderdash.at_level].magictime or 0
+	boulderdash.magicwall_dormant = true
+	boulderdash.magicwall_expired = false
+	
+	print("magic")
+	print(boulderdash.magictime)
+	
 	delay = 0.1
 	scoreboard:load()
 
@@ -80,14 +116,14 @@ function boulderdash:LevelUp()
 	elseif ((yc>=11) and (yc<=26)) then
 		xc = xc - 11
 	end
-	
-	
+
+print(yc)		
 	if (yc<7)then
 		yc = 0
 	elseif (yc>=13) then
 		yc = 4
 	elseif ((yc>=7 and (yc<13))) then
-		yc = yc - 7
+		yc = yc - 8
 	end
 	
 	camera:setPosition(0,0)

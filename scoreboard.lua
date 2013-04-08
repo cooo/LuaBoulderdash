@@ -11,10 +11,10 @@ scoreboard.number_lua = nil
 scoreboard.matrix = {}
 
 function scoreboard:load()
-	self.countdown                = levels[boulderdash.at_level].cave_time
-	self.diamonds_to_get          = levels[boulderdash.at_level].diamonds_to_get
-	self.diamonds_are_worth       = levels[boulderdash.at_level].diamonds_are_worth
-	self.extra_diamonds_are_worth = levels[boulderdash.at_level].extra_diamonds_are_worth
+	self.countdown                = level_loader.games[1].caves[boulderdash.at_level].time
+	self.diamonds_to_get          = level_loader.games[1].caves[boulderdash.at_level].diamonds_to_get
+	self.diamonds_are_worth       = level_loader.games[1].caves[boulderdash.at_level].diamonds_are_worth
+	self.extra_diamonds_are_worth = level_loader.games[1].caves[boulderdash.at_level].extra_diamonds_are_worth
 	self.one_second_timer         = reset_time()
 		
 	scoreboard.number_lua = love.filesystem.load( boulderdash.objpath .. "number.lua" )
@@ -54,6 +54,16 @@ function scoreboard:update(dt)
 			self.countdown = 0
 			boulderdash.dead = true -- to prevent starting the explode sequence again
 		end
+		
+		if not boulderdash.magicwall_dormant and not boulderdash.magicwall_expired then
+			boulderdash.magictime = boulderdash.magictime - 1
+
+			boulderdash.sounds.twinkly_magic_wall:play()
+			if (boulderdash.magictime <= 0) then
+				boulderdash.magicwall_expired = true
+				boulderdash.sounds.twinkly_magic_wall:stop()
+			end
+		end
 		self.one_second_timer = reset_time()
 	end
 	scoreboard:diamonds()
@@ -71,13 +81,6 @@ function scoreboard:draw_on_board(str, x)
 	end
 end
 
-function string.rjust(str, len, pad)
-	if string.len(str) >= len then
-	 	return str
-	else
-		return string.rjust(pad .. str, len, pad)
-	end
-end
 
 function scoreboard:diamonds()
 		
