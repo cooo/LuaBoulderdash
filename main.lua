@@ -25,6 +25,7 @@ function love.update(dt)
 	
 	if boulderdash.dead then
 		boulderdash:explode("rockford")
+		boulderdash.sounds.twinkly_magic_wall:stop()
 	end
 
 	if not boulderdash.start_over then

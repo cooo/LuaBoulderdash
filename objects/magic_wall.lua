@@ -19,21 +19,37 @@ function magic_wall:update(dt)
 		-- check for falling rocks or diamonds
 		local x, y = self:getPos()
 		local object = boulderdash:find(x,y-1)
-		print(object.type)
+		
 		if (object.falling) then
-					print("falling")
 			boulderdash.magicwall_dormant = false
+		end
 
-			-- it gets better
-			if boulderdash:find(x,y+1).type=="space" then
-				if object.type=="rock" then
-					boulderdash.Create( "diamond", x, y+1 )
-				end
+	-- it gets better
+	elseif boulderdash:magic_wall_tingles() then
+
+		local x, y = self:getPos()
+		local object = boulderdash:find(x,y-1)
+
+		if object.falling and boulderdash:find(x,y+1).type=="space" then
+			if object.type=="rock" then
+				boulderdash.Create( "space",   x, y-1 )
+				boulderdash.Create( "diamond", x, y+1 )
 			end
-			
+			if object.type=="diamond" then
+				boulderdash.Create( "space",   x, y-1 )
+				boulderdash.Create( "rock", x, y+1 )
+			end
 
 		end
-		
+			
+	elseif boulderdash.magicwall_expired then
+		local x, y = self:getPos()
+		local object = boulderdash:find(x,y-1)
+
+		if (object.falling) then
+			object.falling = false
+		end
+
 	else
 		local timer = since(t_minus_zero) % 1
 		self.sprite_index = 1 + math.floor(timer / (1/4))

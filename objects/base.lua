@@ -15,7 +15,11 @@ function id(x,y)
 end
 
 function base:to_s()
-	print(base.type .. ": (" .. base.x .. ", " .. base.y .. ")")
+	if base.falling then
+		print(base.type .. ": (" .. base.x .. ", " .. base.y .. ") falling")
+	else
+		print(base.type .. ": (" .. base.x .. ", " .. base.y .. ") not falling")
+	end
 end
 
 function base:setPos( x, y )
@@ -81,8 +85,12 @@ function base:fall()
 		swap(base, x+1, y+1)
 	elseif (boulderdash:find(x,y+1).explode ) then
 		boulderdash:explode(id(x,y+1))
-	elseif (boulderdash:find(x,y+1).hard and boulderdash:find(x,y+1).falling ) then
-	    base.falling = false
+	elseif (boulderdash:find(x,y+1).hard and not (boulderdash:find(x,y+1).type=="magic_wall") ) then
+		if base.falling then
+			boulderdash.sounds.rock_fall:play()
+	    	base.falling = false
+		end
+		-- magic wall is checked inside each magic wall object
 	end
 	
 end

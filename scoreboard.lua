@@ -55,10 +55,9 @@ function scoreboard:update(dt)
 			boulderdash.dead = true -- to prevent starting the explode sequence again
 		end
 		
-		if not boulderdash.magicwall_dormant and not boulderdash.magicwall_expired then
+		if boulderdash:magic_wall_tingles() then
 			boulderdash.magictime = boulderdash.magictime - 1
 
-			boulderdash.sounds.twinkly_magic_wall:play()
 			if (boulderdash.magictime <= 0) then
 				boulderdash.magicwall_expired = true
 				boulderdash.sounds.twinkly_magic_wall:stop()
@@ -67,6 +66,9 @@ function scoreboard:update(dt)
 		self.one_second_timer = reset_time()
 	end
 	scoreboard:diamonds()
+	if boulderdash:magic_wall_tingles() then
+		boulderdash.sounds.twinkly_magic_wall:play()
+	end
 end
 
 function scoreboard:draw_on_board(str, x)
@@ -86,7 +88,7 @@ function scoreboard:diamonds()
 		
 	scoreboard:draw_on_board(self.diamonds_to_get,                  10)
 	scoreboard:draw_on_board(self.diamonds_are_worth,              100)
-	scoreboard:draw_on_board(boulderdash.diamonds,                 250)
+	scoreboard:draw_on_board(string.rjust(boulderdash.diamonds, 2, "0"),                 250)
 	scoreboard:draw_on_board(string.rjust(self.countdown, 3, "0"), 350)
 	scoreboard:draw_on_board(string.rjust(self.score,     6, "0"), 500) -- format with 6 positions
 	
@@ -108,6 +110,7 @@ function scoreboard:draw()
 	-- 
 	if (boulderdash.diamonds >= self.diamonds_to_get) then
 		if not boulderdash.flash then
+			boulderdash.sounds.twang:play()
 			love.graphics.setBackgroundColor(255,255,255)
 			boulderdash.flash=true
 		end

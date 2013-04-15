@@ -24,6 +24,11 @@ function id(x,y)
 	return "x" .. x .. "y" .. y
 end
 
+function boulderdash:magic_wall_tingles()
+	return not boulderdash.magicwall_dormant and not boulderdash.magicwall_expired 
+end
+
+
 function boulderdash.Derive(name)
 	return love.filesystem.load( boulderdash.objpath .. name .. ".lua" )()
 end
@@ -117,7 +122,6 @@ function boulderdash:LevelUp()
 		xc = xc - 11
 	end
 
-print(yc)		
 	if (yc<7)then
 		yc = 0
 	elseif (yc>=13) then
@@ -176,6 +180,7 @@ function boulderdash:explode(find)
 	if object and object.explode_to_diamonds then
 		explode_to = "diamond"
 	end
+	boulderdash.sounds.explosion:play()
 
 	local x,y = boulderdash:Replace(find, "space")
 	boulderdash:canExplode( x  , y  , explode_to )

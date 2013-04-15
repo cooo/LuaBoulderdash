@@ -2,6 +2,7 @@ local leaving = boulderdash.Derive("base")
 
 function leaving:load()
 	print("create")
+	boulderdash.sounds.twinkly_magic_wall:stop()
 end
 
 function leaving:update(dt)

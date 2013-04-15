@@ -102,7 +102,6 @@ end
 
 
 function rockford:LeftOrRight(x, grab)
-	print("rockford l.r.")
 	table.remove(boulderdash.keypressed, 1)
 	if self:canMove( x, 0 ) then
 		if grab then
@@ -119,7 +118,6 @@ function rockford:LeftOrRight(x, grab)
 end
 
 function rockford:UpOrDown(y, grab)
-	print("rockford u.d.")
 	table.remove(boulderdash.keypressed, 1)
 	if self:canMove( 0, y ) then
 		if grab then
