@@ -180,7 +180,7 @@ function boulderdash:explode(find)
 	if object and object.explode_to_diamonds then
 		explode_to = "diamond"
 	end
-	boulderdash.sounds.explosion:play()
+	play_sound("explosion")
 
 	local x,y = boulderdash:Replace(find, "space")
 	boulderdash:canExplode( x  , y  , explode_to )

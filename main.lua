@@ -7,6 +7,7 @@ function love.load()
 	t_minus_zero = reset_time()
 	idle_time = reset_time()
 	gamePaused = false
+	sounds = false
 	delay = 0.10
 	delay_dt = 0
 
@@ -47,6 +48,14 @@ function love.keypressed(key, unicode)
 	if key=="d" then
 		-- print some debug stuff here
 	end
+	
+	if key=="s" then
+		if sounds then
+			sounds = false
+		else
+			sounds = true
+		end
+	end
 end
 
 function love.keyreleased(key, unicode)
@@ -73,4 +82,10 @@ end
 
 function reset_time()
 	return love.timer.getMicroTime()
+end
+
+function play_sound(sound)
+	if sounds then
+		boulderdash.sounds[sound]:play()
+	end
 end

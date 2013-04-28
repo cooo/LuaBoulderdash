@@ -4,6 +4,7 @@ local directions = { {x=-1,y=0}, {x=0,y=-1}, {x=1,y=0}, {x=0,y=1} }
 local orientation = 1
 firefly.explode = true
 firefly.rounded = true
+firefly.deadly  = true
 firefly.images = {}
 firefly.sprite_index = 1
 firefly.flash_delay = 0.02
@@ -31,7 +32,6 @@ function firefly:load( x, y )
 end
 
 function firefly:update(dt)
-	self:isDeadlyToRockford()
 	self:move(dt)
 --	if (since(self.flash_timer) > self.flash_delay) then
 		self.sprite_index = self.sprite_index + 1
@@ -76,20 +76,5 @@ function firefly:move(dt)
 		self:rotateRight()
 	end	
 end
-
-function firefly:isDeadlyToRockford()
-	local x, y = self:getPos()
-	for i,d in ipairs(directions) do
-		if firefly:rockford_is_close(d) then
-			boulderdash.dead = true
-		end
-	end
-	
-end
-
-function firefly:rockford_is_close(d)
-	return (boulderdash:find(self.x+d.x, self.y+d.y).type == "rockford")
-end
-
 
 return firefly

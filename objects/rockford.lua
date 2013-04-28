@@ -7,6 +7,7 @@ rockford.images.tap = {}
 local random_number
 local random_number_lock = false
 local sprite_index
+local directions = { {x=-1,y=0}, {x=0,y=-1}, {x=1,y=0}, {x=0,y=1} }
 
 function rockford:load( x, y )
 	
@@ -45,6 +46,10 @@ function rockford:default()
 	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "rockford/rockford.png"))
 end
 
+function rockford:deadly_critter_at(d)
+	return boulderdash:find(self.x+d.x, self.y+d.y).deadly
+end
+
 -- move him around or grab something
 function rockford:move(dt)
 
@@ -64,17 +69,34 @@ function rockford:move(dt)
 	end
 end
 
+
 -- when a rock or diamond falls on his head rockford dies
 function rockford:he_might_die()
 	local xr,yr = self:getPos()
 	
+	self:dies_from_things_falling_on_his_head(xr, yr)
+	self:dead_from_being_close_to_deadly_critters(xr, yr)
+end
+
+
+function rockford:dies_from_things_falling_on_his_head(xr, yr)
 	local object = boulderdash:find(xr,yr-1)
 	if (object.falling and not boulderdash.done) then
 		print("game over")
 		boulderdash.dead = true
 	end
-
 end
+
+
+function rockford:dead_from_being_close_to_deadly_critters(xr, yr)
+	for i,direction in ipairs(directions) do
+		if (rockford:deadly_critter_at(direction) and not boulderdash.done) then
+			boulderdash.dead = true
+		end
+	end
+end
+
+
 
 -- he gets a little nervous when he doesn't have anything to do
 function rockford:wink()

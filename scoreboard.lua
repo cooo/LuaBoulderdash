@@ -67,7 +67,7 @@ function scoreboard:update(dt)
 	end
 	scoreboard:diamonds()
 	if boulderdash:magic_wall_tingles() then
-		boulderdash.sounds.twinkly_magic_wall:play()
+		play_sound("twinkly_magic_wall")
 	end
 end
 
@@ -86,11 +86,11 @@ end
 
 function scoreboard:diamonds()
 		
-	scoreboard:draw_on_board(self.diamonds_to_get,                  10)
-	scoreboard:draw_on_board(self.diamonds_are_worth,              100)
-	scoreboard:draw_on_board(string.rjust(boulderdash.diamonds, 2, "0"),                 250)
-	scoreboard:draw_on_board(string.rjust(self.countdown, 3, "0"), 350)
-	scoreboard:draw_on_board(string.rjust(self.score,     6, "0"), 500) -- format with 6 positions
+	scoreboard:draw_on_board(string.rjust(self.diamonds_to_get,    2, "0"),  10)
+	scoreboard:draw_on_board(string.rjust(self.diamonds_are_worth, 2, "0"), 100)
+	scoreboard:draw_on_board(string.rjust(boulderdash.diamonds,    2, "0"), 250)
+	scoreboard:draw_on_board(string.rjust(self.countdown,          3, "0"), 350)
+	scoreboard:draw_on_board(string.rjust(self.score,              6, "0"), 500) -- format with 6 positions
 	
 end
 
@@ -110,7 +110,7 @@ function scoreboard:draw()
 	-- 
 	if (boulderdash.diamonds >= self.diamonds_to_get) then
 		if not boulderdash.flash then
-			boulderdash.sounds.twang:play()
+			play_sound("twang")
 			love.graphics.setBackgroundColor(255,255,255)
 			boulderdash.flash=true
 		end

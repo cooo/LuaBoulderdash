@@ -30,7 +30,7 @@ function diamond:consume()
 		scoreboard.score = scoreboard.score + scoreboard.diamonds_are_worth
 
 		boulderdash.sounds.get_diamond:rewind()
-		boulderdash.sounds.get_diamond:play()
+		play_sound("get_diamond")
 	else
 		scoreboard.score = scoreboard.score + scoreboard.extra_diamonds_are_worth
 	end
