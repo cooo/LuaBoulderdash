@@ -17,7 +17,12 @@ boulderdash.died = false
 boulderdash.start_over = false
 boulderdash.flash = false
 boulderdash.keypressed = {}
-
+boulderdash.amoeba_timer     = 0
+boulderdash.amoeba_max       = 20
+boulderdash.has_amoeba       = false
+boulderdash.amoeba_can_grow  = false
+boulderdash.amoeba_random    = 4/128
+boulderdash.amoebas = {}
 local register = {}
 
 function id(x,y)
@@ -44,8 +49,6 @@ end
 function boulderdash:find_by_id(find)
 	return boulderdash.objects[find]
 end
-
-
 
 local function registerObjects()
 	-- register everything in the boulderdash.objpath folder
@@ -107,10 +110,11 @@ function boulderdash:LevelUp()
 	boulderdash.magictime = level_loader.games[1].caves[boulderdash.at_level].magictime or 0
 	boulderdash.magicwall_dormant = true
 	boulderdash.magicwall_expired = false
-	
-	print("magic")
-	print(boulderdash.magictime)
-	
+	boulderdash.amoebatime = tonumber(level_loader.games[1].caves[boulderdash.at_level].amoebatime) or 0
+	boulderdash.amoeba_timer  = 0
+	boulderdash.amoeba_random = 4/128
+
+	boulderdash.i = 0	
 	delay = 0.1
 	scoreboard:load()
 
@@ -215,6 +219,9 @@ end
 
 function boulderdash:update(dt)
 	if delay_dt > delay then
+		boulderdash.i = boulderdash.i + 1		
+		boulderdash.amoeba_can_grow  = false
+		boulderdash.amoeba_count = 0
 		scoreboard:update(dt)
 		for i, object in pairs(boulderdash.objects) do
 			if object.update then
@@ -229,9 +236,34 @@ function boulderdash:update(dt)
 		if boulderdash.flash then
 			love.graphics.setBackgroundColor(0,0,0)
 		end
-	
+		
+		if (boulderdash.amoeba_count > boulderdash.amoeba_max) then 				-- change to rocks?
+			for i, object in pairs(boulderdash.objects) do
+				if (object.type == "amoeba") then
+					local x,y = boulderdash:Replace(object.id, "rock")
+				end
+			end			
+		elseif boulderdash.has_amoeba and not boulderdash.amoeba_can_grow then		-- change to diamonds?
+			for i, object in pairs(boulderdash.objects) do
+				if (object.type == "amoeba") then
+					local x,y = boulderdash:Replace(object.id, "diamond")
+				end
+			end
+			boulderdash.has_amoeba = false
+		elseif boulderdash.has_amoeba and boulderdash.amoeba_can_grow then			-- amoeba can grow?
+			if (math.random(1,(1/boulderdash.amoeba_random))==1) then   			-- amoeba grows this frame
+				local pick_amoeba = math.random(1,#boulderdash.amoebas)
+				local x,y = boulderdash:Replace(boulderdash.amoebas[pick_amoeba].id, "amoeba")
+			end
+			-- amoeba has grown
+			boulderdash.amoebas = {}
+		end
     end
 	delay_dt = delay_dt + dt
+	boulderdash.amoeba_timer = boulderdash.amoeba_timer + dt
+	if boulderdash.amoeba_timer > boulderdash.amoebatime then
+		boulderdash.amoeba_random = 0.25
+	end
 
 end
 
@@ -256,7 +288,7 @@ function boulderdash:draw()
 	camera:unset()
 	
 	scoreboard:draw()
-	love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 750, 10)
+--	love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 750, 10)
 		
 end
 

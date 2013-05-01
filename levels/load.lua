@@ -71,6 +71,8 @@ local function parse(file)
 				cave.extra_diamonds_are_worth = string.split(diamond_values, " ")[2] or 0
 			elseif line:starts_with("MagicWallTime") then
 				cave.magictime = line:get_after("MagicWallTime=")
+			elseif line:starts_with("AmoebaTime") then
+				cave.amoebatime = line:get_after("AmoebaTime=")
 			end
 
 		elseif (current_section == "[map]") then

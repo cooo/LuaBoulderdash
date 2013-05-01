@@ -23,7 +23,8 @@ object_map2 = {
 	q     = "firefly",
 	c     = "butterfly",
 	[" "] = "space",
-	M	  = "magic_wall"
+	M	  = "magic_wall",
+	a     = "amoeba"
 }
 
 levels = {}
