@@ -260,9 +260,12 @@ function boulderdash:update(dt)
 		end
     end
 	delay_dt = delay_dt + dt
-	boulderdash.amoeba_timer = boulderdash.amoeba_timer + dt
-	if boulderdash.amoeba_timer > boulderdash.amoebatime then
-		boulderdash.amoeba_random = 0.25
+	
+	if boulderdash.has_amoeba then
+		boulderdash.amoeba_timer = boulderdash.amoeba_timer + dt
+		if boulderdash.amoeba_timer > boulderdash.amoebatime then
+			boulderdash.amoeba_random = 0.25
+		end
 	end
 
 end

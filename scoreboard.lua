@@ -65,7 +65,6 @@ function scoreboard:update(dt)
 			end
 		end
 		self.one_second_timer = reset_time()
-		print(boulderdash.amoeba_random)
 	end
 	scoreboard:diamonds()
 	if boulderdash:magic_wall_tingles() then

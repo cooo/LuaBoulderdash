@@ -47,7 +47,11 @@ function rockford:default()
 end
 
 function rockford:deadly_critter_at(d)
-	return boulderdash:find(self.x+d.x, self.y+d.y).deadly
+	if boulderdash:find(self.x+d.x, self.y+d.y) then
+		return boulderdash:find(self.x+d.x, self.y+d.y).deadly
+	else
+		return false
+	end
 end
 
 -- move him around or grab something

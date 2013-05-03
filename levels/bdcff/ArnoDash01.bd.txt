@@ -17,7 +17,7 @@ Caves=20
 Name=Cave 1
 CaveDelay=8
 CaveTime=120
-DiamondsRequired=18
+DiamondsRequired=1
 DiamondValue=15 20
 Colors=Black Black Gray1 LightGreen Yellow
 MagicWallTime=16
@@ -32,8 +32,8 @@ W...r....rr .r... . d.. ...rd..r..r... W
 W.r.... .....r ..r......  .... ..r.. r.W
 W..wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww...rW
 W.... .r.... ....r.. .. ..r.... .......W
-W. .......r...a........r...drr..d.r.r..W
-WP..r.... r.rr.d.....r..r......r.r..drXW
+W. .......r............r...drr..d.r.r..W
+XP..r.... r.rr.d.....r..r......r.r..dr.W
 W..rr ....r.rr..r..r......... ..r......W
 W.....d......... ..... ..d...r.....r...W
 Wd....r.r..r.......r.... ...  r.... ...W
