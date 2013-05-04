@@ -42,8 +42,8 @@ function boulderdash:find(x,y)
 	return boulderdash.objects[id(x,y)]
 end
 
-function boulderdash:find_by_id(find)
-	return boulderdash.objects[find]
+function boulderdash:findByID(id)
+	return boulderdash.objects[id]
 end
 
 local function registerObjects()
@@ -134,13 +134,26 @@ function boulderdash:LevelUp()
 end
 
 function boulderdash:Replace(find, replace)
-	-- find rockford, and replace him with an entrance
 	for i, object in pairs(boulderdash.objects) do
-		if ((object.type == find) or (object.id == find)) then
+		if (object.type == find) then
 			boulderdash.Create( replace, object.x, object.y )
 			return object.x, object.y
 		end
 	end	
+end
+
+function boulderdash:ReplaceAll(find, replace)
+	for i, object in pairs(boulderdash.objects) do
+		if (object.type == find) then
+			boulderdash.Create( replace, object.x, object.y )
+		end
+	end	
+end
+
+function boulderdash:ReplaceByID(id, replace)
+	local object = boulderdash:findByID(id)
+	boulderdash.Create( replace, object.x, object.y )
+	return object.x, object.y
 end
 
 function boulderdash.Create(name, x, y, explode_to)
@@ -174,14 +187,14 @@ end
 
 
 function boulderdash:explode(find)
-	local object = boulderdash:find_by_id(find)
+	local object = boulderdash:findByID(find)
 	local explode_to = nil
 	if object and object.explode_to_diamonds then
 		explode_to = "diamond"
 	end
 	play_sound("explosion")
 
-	local x,y = boulderdash:Replace(find, "space")
+	local x,y = boulderdash:ReplaceByID(find, "space")
 	boulderdash:canExplode( x  , y  , explode_to )
 	boulderdash:canExplode( x+1, y  , explode_to )
 	boulderdash:canExplode( x-1, y  , explode_to )

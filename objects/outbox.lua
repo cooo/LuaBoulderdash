@@ -26,7 +26,7 @@ end
 
 function outbox:consume()
 	if not outbox.hard then
-		boulderdash:Replace("x" .. 1 .. "y" .. 1, "leaving")
+		boulderdash:Replace(id(1,1), "leaving")	-- TODO: find a better way to do this
 		boulderdash.setDone()
 		return true
 	else

@@ -15,7 +15,7 @@ amoebas.events           = {}           -- what might happen to amoebas
 -- events
 local growth      = {}	    -- amoeba can grow?
 local to_rocks    = {}	    -- change to rocks?
-local to_diamonds = {}		-- change to diamonds?
+local to_diamonds = {}      -- change to diamonds?
 
 function growth.happens()
 	return amoebas.present and (#amoebas.grow_directions > 0) 
@@ -38,20 +38,12 @@ function growth.execute()
 end
 
 function to_diamonds.execute()
-	for i, object in pairs(boulderdash.objects) do
-		if (object.type == "amoeba") then
-			local x,y = boulderdash:Replace(object.id, "diamond")
-		end
-	end
+	boulderdash:ReplaceAll("amoeba", "diamond")
 	amoebas.present = false
 end
 
 function to_rocks.execute()
-	for i, object in pairs(boulderdash.objects) do
-		if (object.type == "amoeba") then
-			local x,y = boulderdash:Replace(object.id, "rock")
-		end
-	end
+	boulderdash:ReplaceAll("amoeba", "rock")
 	amoebas.present = false
 end
 
