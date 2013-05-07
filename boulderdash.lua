@@ -10,7 +10,6 @@ boulderdash.objects   = {}
 boulderdash.imgpath   = "images/"
 boulderdash.diamonds = 0
 boulderdash.at_level = 0
-boulderdash.goal = {}
 boulderdash.done = true
 boulderdash.dead = false
 boulderdash.died = false
@@ -164,14 +163,6 @@ function boulderdash.Create(name, x, y, explode_to)
 	else
 		print("Error: Entity " .. name .. " does not exist! ")
 	end
-end
-
-function boulderdash:setGoal( x, y )
-	self.goal = { x=x,y=y }
-end
-
-function boulderdash:getGoal()
-	return self.goal
 end
 
 function boulderdash:explode(find)

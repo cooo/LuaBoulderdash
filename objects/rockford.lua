@@ -33,7 +33,6 @@ function rockford:load( x, y )
 	end
 	
 	self:setPos( x, y )
-	boulderdash:setGoal( x, y )
 end
 
 function rockford:update(dt)
@@ -175,7 +174,6 @@ function rockford:doMoveRockford(x,y)
 
 	local xr,yr = self:getPos()
 	self:doMove(x,y)
-	boulderdash:setGoal( xr+x, yr+y )
 	-- xr -> xxr
 	-- 10 -> 11 no move
 	-- 11 -> 10 no move
