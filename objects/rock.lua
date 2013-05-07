@@ -15,7 +15,6 @@ end
 function rock:push(x)
 	local xr,yr = self:getPos()
 	local one = math.random(1,8)
-	print(one)
 	if ((one==1) and (boulderdash:find(xr+x,yr).type=="space")) then
 		self:doMove( x, 0 )
 	end

@@ -1,13 +1,14 @@
 require("lib/strings")
 require("boulderdash")
 require("levels/load")
+require("keyboard")
+
 
 function love.load()
 
 	t_minus_zero = reset_time()
 	idle_time = reset_time()
 	gamePaused = false
-	sounds = false
 	delay = 0.10
 	delay_dt = 0
 
@@ -26,7 +27,7 @@ function love.update(dt)
 	
 	if boulderdash.dead then
 		boulderdash:explode("rockford")
-		boulderdash.sounds.twinkly_magic_wall:stop()
+		audio.sounds.twinkly_magic_wall:stop()
 	end
 
 	if not boulderdash.start_over then
@@ -41,6 +42,14 @@ function love.draw()
 end
 
 
+-- some ideas for keys:
+-- cursor & space is taken care of in the rockford object
+-- s : sound on/off
+-- d : suicide (when rockford is stuck)
+-- q : quit (kill the complete game)
+-- m : bring up a menu so you can change caves/levels
+-- 
+
 function love.keypressed(key, unicode)
 	idle_time = love.timer.getMicroTime()	-- the start of idle time
 	debug = {}
@@ -48,14 +57,10 @@ function love.keypressed(key, unicode)
 	if key=="d" then
 		-- print some debug stuff here
 	end
-	
-	if key=="s" then
-		if sounds then
-			sounds = false
-		else
-			sounds = true
-		end
-	end
+
+	-- defer key to handler
+	keyboard.keypressed(key)
+
 end
 
 function love.keyreleased(key, unicode)
@@ -84,8 +89,3 @@ function reset_time()
 	return love.timer.getMicroTime()
 end
 
-function play_sound(sound)
-	if sounds then
-		boulderdash.sounds[sound]:play()
-	end
-end

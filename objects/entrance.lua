@@ -20,7 +20,7 @@ function entrance:update(dt)
 		if (self.sprite_index >= self.end_frame) then
 			self.sprite_index = self.end_frame
 			boulderdash:Replace("entrance", "rockford")
-			play_sound("twang")
+			audio:play("twang")
 		end
 		self.flash_timer = reset_time()
 	end	

@@ -2,13 +2,12 @@ require("camera")
 require("levels/levels")
 require("scoreboard")
 require("amoebas")
+require("audio")
 
 boulderdash = {}
 boulderdash.objpath   = "objects/"
 boulderdash.objects   = {}
 boulderdash.imgpath   = "images/"
-boulderdash.soundpath = "sound/"
-boulderdash.sounds    = {}
 boulderdash.diamonds = 0
 boulderdash.at_level = 0
 boulderdash.goal = {}
@@ -57,19 +56,10 @@ local function registerObjects()
 	end
 end
 
-local function loadSounds()
-	local sounds = love.filesystem.enumerate( boulderdash.soundpath )	
-	for k, sound in ipairs(sounds) do
-		if string.find(sound, ".ogg") then
-			local sound_name = string.sub(sound,1,string.find(sound, ".ogg") - 1)
-			boulderdash.sounds[sound_name] = love.audio.newSource(boulderdash.soundpath .. sound)
-		end
-	end
-end
 
 function boulderdash:Startup()
 	registerObjects()
-	loadSounds()
+	audio:init()
 end
 
 
@@ -106,10 +96,9 @@ function boulderdash:LevelUp()
 	boulderdash.magictime = level_loader.games[1].caves[boulderdash.at_level].magictime or 0
 	boulderdash.magicwall_dormant = true
 	boulderdash.magicwall_expired = false
-	
-	amoebas.init(tonumber(level_loader.games[1].caves[boulderdash.at_level].amoebatime))
+	print(tonumber(level_loader.games[1].caves[boulderdash.at_level].amoebatime))
+	amoebas:init(13)
 
-	boulderdash.i = 0	
 	delay = 0.1
 	scoreboard:load()
 
@@ -185,16 +174,19 @@ function boulderdash:getGoal()
 	return self.goal
 end
 
-
 function boulderdash:explode(find)
 	local object = boulderdash:findByID(find)
 	local explode_to = nil
+	local x,y = 0,0
 	if object and object.explode_to_diamonds then
-		explode_to = "diamond"
+		explode_to = "diamond"	
+		x, y = boulderdash:ReplaceByID(find, "space")
+	else
+		x, y = boulderdash:Replace(find, "space")
 	end
-	play_sound("explosion")
+	audio:play("explosion")
 
-	local x,y = boulderdash:ReplaceByID(find, "space")
+	
 	boulderdash:canExplode( x  , y  , explode_to )
 	boulderdash:canExplode( x+1, y  , explode_to )
 	boulderdash:canExplode( x-1, y  , explode_to )
@@ -227,11 +219,9 @@ end
 
 function boulderdash:update(dt)
 	if delay_dt > delay then
-		boulderdash.i = boulderdash.i + 1		
 
 		amoebas.grow_directions = {}
-		
-
+		scoreboard:update(dt)		
 		for i, object in pairs(boulderdash.objects) do
 			if object.update then
 				if not object.moved then
@@ -240,14 +230,14 @@ function boulderdash:update(dt)
 				end	
 			end
 		end
-		delay_dt = 0
+
 		
 		if boulderdash.flash then
 			love.graphics.setBackgroundColor(0,0,0)
 		end
-		scoreboard:update(dt)		
-		amoebas:update(dt)
-		
+
+		amoebas:update(delay_dt)
+		delay_dt = 0		
     end
 	delay_dt = delay_dt + dt
 	

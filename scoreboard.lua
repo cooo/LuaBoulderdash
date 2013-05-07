@@ -54,21 +54,20 @@ function scoreboard:update(dt)
 			self.countdown = 0
 			boulderdash.dead = true -- to prevent starting the explode sequence again
 		end
-		boulderdash.ii = boulderdash.i
-		boulderdash.i = 0
+
 		if boulderdash:magic_wall_tingles() then
 			boulderdash.magictime = boulderdash.magictime - 1
 
 			if (boulderdash.magictime <= 0) then
 				boulderdash.magicwall_expired = true
-				boulderdash.sounds.twinkly_magic_wall:stop()
+				audio.sounds.twinkly_magic_wall:stop()
 			end
 		end
 		self.one_second_timer = reset_time()
 	end
 	scoreboard:diamonds()
 	if boulderdash:magic_wall_tingles() then
-		play_sound("twinkly_magic_wall")
+		audio:play("twinkly_magic_wall")
 	end
 end
 
@@ -107,11 +106,11 @@ function scoreboard:draw()
 
 	-- draw a scoreboard on top
 	-- 
-	love.graphics.print(tostring(boulderdash.ii) .. " : "..tostring(love.timer.getFPS( )), 750, 10)
-	-- 
+	love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 750, 10)
+
 	if (boulderdash.diamonds >= self.diamonds_to_get) then
 		if not boulderdash.flash then
-			play_sound("twang")
+			audio:play("twang")
 			love.graphics.setBackgroundColor(255,255,255)
 			boulderdash.flash=true
 		end

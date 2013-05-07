@@ -87,7 +87,7 @@ function base:fall()
 		boulderdash:explode(id(x,y+1))
 	elseif (boulderdash:find(x,y+1).hard and not (boulderdash:find(x,y+1).type=="magic_wall") ) then
 		if base.falling then
-			play_sound("rock_fall")
+			audio:play("rock_fall")
 	    	base.falling = false
 		end
 		-- magic wall is checked inside each magic wall object

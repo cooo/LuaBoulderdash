@@ -11,7 +11,7 @@ end
 
 function dirt:consume()
 	
-	play_sound("eat_dirt")
+	audio:play("eat_dirt")
 	
 	return true
 end
