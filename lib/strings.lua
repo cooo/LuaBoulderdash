@@ -39,6 +39,24 @@ function string.rjust(str, len, pad)
 	end
 end
 
+function string.ljust(str, len, pad)
+	str = str or ""
+	if string.len(str) >= len then
+	 	return str
+	else
+		return string.ljust(str .. pad, len, pad)
+	end
+end
+
+function string.center(str, len, pad)
+	str = str or ""
+	if string.len(str) >= len then
+		return str
+	else
+		return string.center(pad .. str .. pad, len, pad)
+	end
+end
+
 function string.plural(str, int)
 	if int==1 then
 		return str

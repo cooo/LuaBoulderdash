@@ -3,6 +3,39 @@ level_loader.folder = "levels/bdcff/"
 level_loader.games = {}
 debug = false
 
+
+level_loader.object_map2 = {
+	W     = "steel",
+	w     = "wall",
+	r     = "rock",
+	d     = "diamond",
+	["."] = "dirt",
+	P     = "rockford",
+	X     = "outbox",
+	q     = "firefly",
+	c     = "butterfly",
+	[" "] = "space",
+	M	  = "magic_wall",
+	a     = "amoeba"
+}
+
+level_loader.object_map3 = {
+	P     = 1,  -- "rockford",
+	W     = 2,  -- "steel",
+	X     = 3,  -- "outbox",
+	H     = 3,  -- "hidden outbox"
+	M	  = 4,  -- "wall",
+	x	  = 4,  -- "wall",
+	w     = 4,  -- "wall",
+	c     = 5,  --"butterfly",
+	["."] = 6,  -- "dirt",
+	[" "] = 7,  -- "space",
+	r     = 8,  -- "rock",
+	a     = 9,  -- "amoeba"
+	q     = 10, -- "firefly",
+	d     = 11, -- "diamond",
+}
+
 local start_sections = { "[BDCFF]", "[game]", "[cave]", "[map]" }
 local end_sections = { "[/BDCFF]", "[/game]", "[/cave]", "[/map]" }
 
@@ -102,3 +135,22 @@ function level_loader:load()
 	end
 end
 
+function lookup(letter)
+	object = level_loader.object_map2[letter]
+	if object then
+		return object
+	else
+		print("cannot find " .. letter)
+		return "space"
+	end
+end
+
+function preview_lookup(letter)
+	object = level_loader.object_map3[letter]
+	if object then
+		return object
+	else
+		print("cannot find " .. letter)
+		return "space"
+	end
+end

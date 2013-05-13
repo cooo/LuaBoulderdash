@@ -11,14 +11,16 @@ scoreboard.number_lua = nil
 scoreboard.matrix = {}
 
 function scoreboard:load()
-	self.countdown                = level_loader.games[1].caves[boulderdash.at_level].time
-	self.diamonds_to_get          = level_loader.games[1].caves[boulderdash.at_level].diamonds_to_get
-	self.diamonds_are_worth       = level_loader.games[1].caves[boulderdash.at_level].diamonds_are_worth
-	self.extra_diamonds_are_worth = level_loader.games[1].caves[boulderdash.at_level].extra_diamonds_are_worth
+	self.countdown                = level_loader.games[menu.game_index].caves[menu.cave_index].time
+	self.diamonds_to_get          = level_loader.games[menu.game_index].caves[menu.cave_index].diamonds_to_get
+	self.diamonds_are_worth       = level_loader.games[menu.game_index].caves[menu.cave_index].diamonds_are_worth
+	self.extra_diamonds_are_worth = level_loader.games[menu.game_index].caves[menu.cave_index].extra_diamonds_are_worth
 	self.one_second_timer         = reset_time()
 		
 	scoreboard.number_lua = love.filesystem.load( boulderdash.objpath .. "number.lua" )
 	scoreboard:diamonds()
+	
+	scoreboard.screen_width = love.graphics.getWidth()
 end
 
 -- finds a digit on the scoreboard and change it to i, create it if not found
@@ -60,14 +62,14 @@ function scoreboard:update(dt)
 
 			if (boulderdash.magictime <= 0) then
 				boulderdash.magicwall_expired = true
-				audio.sounds.twinkly_magic_wall:stop()
+				audio:stop("twinkly_magic_wall")
 			end
 		end
 		self.one_second_timer = reset_time()
 	end
 	scoreboard:diamonds()
 	if boulderdash:magic_wall_tingles() then
-		audio:play("twinkly_magic_wall")
+		audio:play("twinkly_magic_wall", true)
 	end
 end
 
@@ -97,7 +99,7 @@ end
 function scoreboard:draw()
 
 	love.graphics.setColor(0,0,0)
-	love.graphics.rectangle("fill", 0, 0, screen_width, 32 )
+	love.graphics.rectangle("fill", 0, 0, scoreboard.screen_width, 32 )
 
 	-- draw the matrix
 	for i, object in pairs(self.matrix) do

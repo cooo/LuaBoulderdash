@@ -12,20 +12,6 @@ object_map = {
 }
 
 
-object_map2 = {
-	W     = "steel",
-	w     = "wall",
-	r     = "rock",
-	d     = "diamond",
-	["."] = "dirt",
-	P     = "rockford",
-	X     = "outbox",
-	q     = "firefly",
-	c     = "butterfly",
-	[" "] = "space",
-	M	  = "magic_wall",
-	a     = "amoeba"
-}
 
 levels = {}
 

@@ -1,7 +1,7 @@
 local leaving = boulderdash.Derive("base")
 
 function leaving:load()
-	audio.sounds.twinkly_magic_wall:stop()
+	audio:stop("twinkly_magic_wall")
 end
 
 function leaving:update(dt)

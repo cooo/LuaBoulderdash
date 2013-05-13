@@ -13,7 +13,7 @@ function love.load()
 	delay_dt = 0
 
 	love.graphics.setColorMode("replace")
-	screen_width = love.graphics.getWidth()	
+		
 	
 	level_loader:load()
 		
@@ -27,7 +27,8 @@ function love.update(dt)
 	
 	if boulderdash.dead then
 		boulderdash:explode("rockford")
-		audio.sounds.twinkly_magic_wall:stop()
+		boulderdash.magicwall_dormant = true
+		audio:stop("twinkly_magic_wall")
 	end
 
 	if not boulderdash.start_over then
@@ -46,6 +47,7 @@ end
 -- cursor & space is taken care of in the rockford object
 -- s : sound on/off
 -- d : suicide (when rockford is stuck)
+-- p : pause
 -- q : quit (kill the complete game)
 -- m : bring up a menu so you can change caves/levels
 -- 

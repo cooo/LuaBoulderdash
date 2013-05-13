@@ -3,13 +3,13 @@ require("levels/levels")
 require("scoreboard")
 require("amoebas")
 require("audio")
+require("menu")
 
 boulderdash = {}
 boulderdash.objpath   = "objects/"
 boulderdash.objects   = {}
 boulderdash.imgpath   = "images/"
 boulderdash.diamonds = 0
-boulderdash.at_level = 0
 boulderdash.done = true
 boulderdash.dead = false
 boulderdash.died = false
@@ -59,25 +59,16 @@ end
 function boulderdash:Startup()
 	registerObjects()
 	audio:init()
+	menu:load()
 end
 
 
-local function lookup(letter)
-	object = object_map2[letter]
-	if object then
-		return object
-	else
-		print("cannot find " .. letter)
-		return "space"
-	end
-end
 
-function boulderdash:LevelUp()	
+function boulderdash:LevelUp()
 
 	self.objects = {}
-	self.at_level = self.at_level + 1
---	level = levels[self.at_level].playfield
-    level = level_loader.games[1].caves[self.at_level].map
+	menu.cave_index = menu.cave_index + 1
+    level = level_loader.games[menu.game_index].caves[menu.cave_index].map
 	for y,i in pairs(level) do
 		for x,j in pairs(level[y]) do
 			boulderdash.Create( lookup(level[y][x]), x-1, y )
@@ -92,11 +83,10 @@ function boulderdash:LevelUp()
 	boulderdash.died = false
 	boulderdash.start_over = false
 	boulderdash.diamonds = 0
-	boulderdash.magictime = level_loader.games[1].caves[boulderdash.at_level].magictime or 0
+	boulderdash.magictime = level_loader.games[menu.game_index].caves[menu.cave_index].magictime or 0
 	boulderdash.magicwall_dormant = true
 	boulderdash.magicwall_expired = false
-	print(tonumber(level_loader.games[1].caves[boulderdash.at_level].amoebatime))
-	amoebas:init(13)
+	amoebas:init(tonumber(level_loader.games[menu.game_index].caves[menu.cave_index].amoebatime))
 
 	delay = 0.1
 	scoreboard:load()
@@ -203,7 +193,7 @@ end
 
 
 function boulderdash:startOver()
-	boulderdash.at_level = boulderdash.at_level - 1
+	menu.cave_index = menu.cave_index - 1
 	boulderdash:LevelUp()
 end
 
@@ -212,7 +202,7 @@ function boulderdash:update(dt)
 	if delay_dt > delay then
 
 		amoebas.grow_directions = {}
-		scoreboard:update(dt)		
+				
 		for i, object in pairs(boulderdash.objects) do
 			if object.update then
 				if not object.moved then
@@ -228,6 +218,9 @@ function boulderdash:update(dt)
 		end
 
 		amoebas:update(delay_dt)
+		scoreboard:update(dt)
+		menu:update(dt)
+		
 		delay_dt = 0		
     end
 	delay_dt = delay_dt + dt
@@ -256,6 +249,7 @@ function boulderdash:draw()
 	camera:unset()
 	
 	scoreboard:draw()
+	menu:draw()
 --	love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 750, 10)
 		
 end

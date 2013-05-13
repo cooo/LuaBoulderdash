@@ -84,6 +84,7 @@ function base:fall()
 	elseif (boulderdash:find(x,y+1).rounded and boulderdash:find(x+1,y).type=="space" and boulderdash:find(x+1,y+1).type=="space") then
 		swap(base, x+1, y+1)
 	elseif (boulderdash:find(x,y+1).explode ) then
+		print(base.type, base.id, x, y)
 		boulderdash:explode(id(x,y+1))
 	elseif (boulderdash:find(x,y+1).hard and not (boulderdash:find(x,y+1).type=="magic_wall") ) then
 		if base.falling then

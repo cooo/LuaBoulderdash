@@ -25,10 +25,7 @@ function audio.execute()
 		love.audio.stop( )
 	else
 		audio.master_switch = true
---		love.audio.resume( )
-
 		for i, sound in ipairs(audio.loopsounds) do
-			print(love.audio.getNumSources())
 			audio:play(sound, true)
 		end
 	end
@@ -42,5 +39,14 @@ function audio:play(sound, loop)
 	end
 	if loop then
 		audio.sounds[sound]:setLooping(true)
+		if audio.loopsounds[sound] == nil then
+			audio.loopsounds[sound] = true
+		end
+		
 	end
+end
+
+function audio:stop(sound)
+	audio.sounds[sound]:stop()
+	audio.loopsounds[sound] = nil
 end

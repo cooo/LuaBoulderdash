@@ -41,6 +41,9 @@ function magic_wall:update(dt)
 			end
 
 		end
+
+		local timer = since(t_minus_zero) % 1
+		self.sprite_index = 1 + math.floor(timer / (1/4))
 			
 	elseif boulderdash.magicwall_expired then
 		local x, y = self:getPos()
@@ -50,9 +53,7 @@ function magic_wall:update(dt)
 			object.falling = false
 		end
 
-	else
-		local timer = since(t_minus_zero) % 1
-		self.sprite_index = 1 + math.floor(timer / (1/4))
+
 	end
 end
 
@@ -71,7 +72,7 @@ end
 
 -- function magic_wall:consume()
 -- 	boulderdash.magic_walls = boulderdash.magic_walls + 1
--- 	if (boulderdash.magic_walls < level_loader.games[1].caves[boulderdash.at_level].magic_walls_to_get) then
+-- 	if (boulderdash.magic_walls < level_loader.games[menu.game_index].caves[menu.cave_index].magic_walls_to_get) then
 -- 		scoreboard.score = scoreboard.score + scoreboard.magic_walls_are_worth
 -- 	else
 -- 		scoreboard.score = scoreboard.score + scoreboard.extra_magic_walls_are_worth

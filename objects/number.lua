@@ -5,8 +5,8 @@ number.i = nil
 
 function number:load(x,y,i)
 	self:setImage(love.graphics.newImage( boulderdash.imgpath .. "numbers_white.png"))
-	for i=0, 16*(10-1), 16 do
-		table.insert( self.quads, love.graphics.newQuad(0, i, 32, 16, 32, 16*10) )
+	for j=0, 16*(10-1), 16 do
+		table.insert( self.quads, love.graphics.newQuad(0, j, 32, 16, 32, 16*10) )
 	end
 	self:setPos( x, y )
 	self:set_index( i )

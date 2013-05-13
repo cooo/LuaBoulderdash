@@ -36,7 +36,7 @@ end
 
 function outbox:draw()	
 	-- animation of the outbox starts now	
-	if (boulderdash.diamonds >= level_loader.games[1].caves[boulderdash.at_level].diamonds_to_get) then
+	if (boulderdash.diamonds >= level_loader.games[menu.game_index].caves[menu.cave_index].diamonds_to_get) then
 		outbox.hard = false
 	end
 

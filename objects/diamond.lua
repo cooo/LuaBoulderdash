@@ -26,7 +26,7 @@ end
 
 function diamond:consume()
 	boulderdash.diamonds = boulderdash.diamonds + 1
-	if (boulderdash.diamonds < level_loader.games[1].caves[boulderdash.at_level].diamonds_to_get) then
+	if (boulderdash.diamonds < level_loader.games[menu.game_index].caves[menu.cave_index].diamonds_to_get) then
 		scoreboard.score = scoreboard.score + scoreboard.diamonds_are_worth
 
 		audio:play("get_diamond")

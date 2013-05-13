@@ -65,6 +65,21 @@ test(string.rjust("12",  2, "0" ), "12"    )
 test(string.rjust("123", 2, "0" ), "123"   )
 test(string.rjust(nil,   2, "0" ), "00"    )
 
+test(string.ljust("12",  6, "0" ), "120000")
+test(string.ljust("12",  6, "01"), "120101")
+test(string.ljust("12",  2, "0" ), "12"    )
+test(string.ljust("123", 2, "0" ), "123"   )
+test(string.ljust("hi",  6, " " ), "hi    ")
+test(string.ljust(nil,   2, "0" ), "00"    )
+
+test(string.center("1",   6, "0" ), "0001000")
+test(string.center("12",  6, "0" ), "001200")
+test(string.center("12",  6, " " ), "  12  ")
+test(string.center("123", 2, "0" ), "123"   )
+test(string.center("hi",  6, " " ), "  hi  ")
+test(string.center(nil,   2, "0" ), "00"    )
+
+
 test(string.split("1,2", ","), {"1" , "2"} )
 test(string.split("1 2"), {"1" , "2"} )
 test(string.split("1"), {"1"} )

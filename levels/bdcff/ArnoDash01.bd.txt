@@ -13,14 +13,16 @@ Fontset=Original
 Levels=1
 Caves=20
 
+
 [cave]
 Name=Cave 1
 CaveDelay=8
 CaveTime=120
-DiamondsRequired=1
+DiamondsRequired=18
 DiamondValue=15 20
 Colors=Black Black Gray1 LightGreen Yellow
 MagicWallTime=16
+
 
 [map]
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -82,6 +84,7 @@ W....... r.......................rr....W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 [/map]
 [/cave]
+
 
 [cave]
 Name=Cave 3
